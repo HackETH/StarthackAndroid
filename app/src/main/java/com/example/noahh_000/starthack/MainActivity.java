@@ -25,7 +25,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        ParseUser.getCurrentUser().put("type", "user");
+        ParseUser.getCurrentUser().saveInBackground();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,8 +36,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
-        ParseUser.enableAutomaticUser(); // Creates an anonymous user if not existent before, user is always logged in afterwards
 
     }
 
