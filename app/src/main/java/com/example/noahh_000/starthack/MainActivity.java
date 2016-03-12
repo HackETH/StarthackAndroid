@@ -48,9 +48,11 @@ public class MainActivity extends AppCompatActivity {
         butt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                ParseUser.getCurrentUser().put("type","user");
+                ParseUser.getCurrentUser().put("type", "user");
                 ParseUser.getCurrentUser().saveInBackground();
+                Intent intentApp = new Intent(v.getContext(), HelpedMain.class);
 
+                v.getContext().startActivity(intentApp);
                 Log.d("main", "getHelp");
             }
         });

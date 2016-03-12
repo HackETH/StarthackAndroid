@@ -55,7 +55,7 @@ public class Initialization extends AppCompatActivity {
 
         else if (currentUser.getString("type").equals("user"))
         {
-            Intent intent = new Intent(this, HelpedPickerActivity.class); // Start user activity
+            Intent intent = new Intent(this, HelpedMain.class); // Start user activity
             this.startActivity(intent);
 
         }else{
