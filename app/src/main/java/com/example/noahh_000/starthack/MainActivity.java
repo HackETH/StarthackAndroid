@@ -1,5 +1,6 @@
 package com.example.noahh_000.starthack;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,8 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.parse.LogInCallback;
+import android.widget.Button;
+import android.widget.Toast;
+
 import com.parse.Parse;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseUser;
@@ -23,16 +26,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         ParseUser.getCurrentUser().put("type", "user");
         ParseUser.getCurrentUser().saveInBackground();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+        final Button button = (Button) findViewById(R.id.help);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                Intent intentApp = new Intent(v.getContext(),HelperIntroActivity.class);
+
+                v.getContext().startActivity(intentApp);
+                Log.d("main", "help");
+            }
+        });
+        final Button butt = (Button) findViewById(R.id.getHelp);
+        butt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                Log.d("main", "getHelp");
             }
         });
 
