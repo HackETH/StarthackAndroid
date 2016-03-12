@@ -10,4 +10,5 @@
 
     <string name="conversationStatus">status</string>
     <string name="error_retrieving_access_token">Error retrieving token</string>
+    <string name="title_activity_ready_translator">ReadyTranslatorActivity</string>
 </resources>
