@@ -38,7 +38,7 @@ public class HelperIntroActivity extends ListActivity {
 
         setListAdapter(adapter);
 
-        final Button butt = (Button) findViewById(R.id.fab);
+        final FloatingActionButton butt = (FloatingActionButton) findViewById(R.id.fab);
         butt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
@@ -47,7 +47,7 @@ public class HelperIntroActivity extends ListActivity {
                 for (int i = 0; i < getListView().getAdapter().getCount(); i++) {
                     if (checked.get(i)) {
                         // Do something
-                        
+
                     }
                 }
                 Log.d("HelperIntro", "ListReady");

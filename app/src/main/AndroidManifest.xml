@@ -29,7 +29,8 @@
             android:label="@string/title_activity_helper_intro"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".HelpedPickerActivity" />
-        <activity android:name=".HelpedMain"></activity>
+        <activity android:name=".HelpedMain" />
+        <activity android:name=".CallLoadingActivity"></activity>
     </application>
 
 </manifest>

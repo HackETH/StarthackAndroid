@@ -68,4 +68,25 @@ public class LanguageParser {
             }
         }
     }
+
+    public static String OriginalToInternational(String original, ArrayList<Language> languages)
+    {
+        for (Language lang : languages)
+        {
+            if (lang.getOriginal().equals(original))
+                return lang.getInternational();
+        }
+        Log.d("languageparser", "languageparser:originaltointernational not found: orig: "+original);
+        return null;
+    }
+    public static String InternationalToOriginal(String international, ArrayList<Language> languages)
+    {
+        for (Language lang : languages)
+        {
+            if (lang.getInternational().equals(international))
+                return lang.getOriginal();
+        }
+        Log.d("languageparser", "languageparser:internationalToOriginal not found: inter: "+international+ " languages count:"+languages.size());
+        return null;
+    }
 }
