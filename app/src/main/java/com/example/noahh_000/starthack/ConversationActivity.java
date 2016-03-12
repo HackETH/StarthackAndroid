@@ -2,6 +2,7 @@ package com.example.noahh_000.starthack;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -175,6 +176,54 @@ public class  ConversationActivity extends AppCompatActivity {
          */
         setCallAction();
 
+
+    }
+
+    private void resumeInit()
+    {
+        Intent intent = getIntent();
+        boolean isInvited = intent.getBooleanExtra("IsInvited", false);
+        String twilioId = intent.getStringExtra("twilioId");
+        if (isInvited)
+        {
+            sendOutGoingInvite(twilioId);
+        }
+    }
+
+    private void sendOutGoingInvite(String participant)
+    {
+        /*
+                 * Make outgoing invite
+                 */
+        if (!participant.isEmpty() && (conversationsClient != null)) {
+            stopPreview();
+            // Create participants set (we support only one in this example)
+            Set<String> participants = new HashSet<>();
+            participants.add(participant);
+            // Create local media
+            LocalMedia localMedia = setupLocalMedia();
+
+            // Create outgoing invite
+            outgoingInvite = conversationsClient.sendConversationInvite(participants,
+                    localMedia, new ConversationCallback() {
+                        @Override
+                        public void onConversation(Conversation conversation, TwilioConversationsException e) {
+                            if (e == null) {
+                                // Participant has accepted invite, we are in active conversation
+                                ConversationActivity.this.conversation = conversation;
+                                conversation.setConversationListener(conversationListener());
+                            } else {
+                                Log.e(TAG, e.getMessage());
+                                hangup();
+                                reset();
+                            }
+                        }
+                    });
+            setHangupAction();
+        } else {
+            Log.e(TAG, "invalid participant call");
+            conversationStatusTextView.setText("call participant failed");
+        }
     }
 
     @Override
@@ -293,25 +342,8 @@ public class  ConversationActivity extends AppCompatActivity {
                      * register for incoming calls. The TwilioAccessManager manages the lifetime
                      * of the access token and notifies the client of token expirations.
                      */
-                    // OPTION 1- Generate an access token from the getting started portal https://www.twilio.com/user/account/video/getting-started
-                    accessManager =
-                            TwilioAccessManagerFactory.createAccessManager(TWILIO_ACCESS_TOKEN, accessManagerListener());
-                    conversationsClient =
-                            TwilioConversations.createConversationsClient(accessManager, conversationsClientListener());
-                    // Specify the audio output to use for this conversation client
-                    conversationsClient.setAudioOutput(AudioOutput.SPEAKERPHONE);
-                    // Initialize the camera capturer and start the camera preview
-                    cameraCapturer = CameraCapturerFactory.createCameraCapturer(
-                            ConversationActivity.this,
-                            CameraCapturer.CameraSource.CAMERA_SOURCE_FRONT_CAMERA,
-                            previewFrameLayout,
-                            capturerErrorListener());
-                    startPreview();
-                    // Register to receive incoming invites
-                    conversationsClient.listen();
 
-                    // OPTION 2- Retrieve an access token from your own web app
-                    // retrieveAccessTokenfromServer();
+                    retrieveAccessTokenfromServer();
                 }
 
                 @Override
@@ -327,6 +359,7 @@ public class  ConversationActivity extends AppCompatActivity {
 
     private void startPreview() {
         cameraCapturer.startPreview();
+
     }
 
     private void stopPreview() {
@@ -387,39 +420,7 @@ public class  ConversationActivity extends AppCompatActivity {
         return new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                /*
-                 * Make outgoing invite
-                 */
-                String participant = participantEditText.getText().toString();
-                if (!participant.isEmpty() && (conversationsClient != null)) {
-                    stopPreview();
-                    // Create participants set (we support only one in this example)
-                    Set<String> participants = new HashSet<>();
-                    participants.add(participant);
-                    // Create local media
-                    LocalMedia localMedia = setupLocalMedia();
 
-                    // Create outgoing invite
-                    outgoingInvite = conversationsClient.sendConversationInvite(participants,
-                            localMedia, new ConversationCallback() {
-                                @Override
-                                public void onConversation(Conversation conversation, TwilioConversationsException e) {
-                                    if (e == null) {
-                                        // Participant has accepted invite, we are in active conversation
-                                        ConversationActivity.this.conversation = conversation;
-                                        conversation.setConversationListener(conversationListener());
-                                    } else {
-                                        Log.e(TAG, e.getMessage());
-                                        hangup();
-                                        reset();
-                                    }
-                                }
-                            });
-                    setHangupAction();
-                } else {
-                    Log.e(TAG, "invalid participant call");
-                    conversationStatusTextView.setText("call participant failed");
-                }
             }
         };
     }
@@ -705,6 +706,7 @@ public class  ConversationActivity extends AppCompatActivity {
             @Override
             public void onStartListeningForInvites(ConversationsClient conversationsClient) {
                 conversationStatusTextView.setText("onStartListeningForInvites");
+                resumeInit();
             }
 
             @Override
@@ -760,7 +762,6 @@ public class  ConversationActivity extends AppCompatActivity {
             @Override
             public void onTokenUpdated(TwilioAccessManager twilioAccessManager) {
                 conversationStatusTextView.setText("onTokenUpdated");
-
             }
 
             @Override

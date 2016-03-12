@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.onesignal.OneSignal;
 
@@ -33,17 +36,12 @@ public class Initialization extends AppCompatActivity {
                     @Override
                     public void idsAvailable(String userId, String registrationId) {
                         ParseUser.getCurrentUser().put("pushID", userId);
-
                     }
                 }
         );
         setContentView(R.layout.activity_initialization);
-        Log.d("Init", "2");
-         // Creates an anonymous user if not existent before, user is always logged in afterwards
-        Log.d("Init", "3");
         ParseUser.getCurrentUser().increment("RunCount");
         ParseUser.getCurrentUser().saveInBackground();
-        Log.d("init","4");
         ParseUser currentUser = ParseUser.getCurrentUser();
         if(currentUser.getString("type") == null){
             Intent intentApp = new Intent(this,
@@ -90,9 +88,11 @@ public class Initialization extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    protected void switchToConversationActivity()
+    protected void switchToConversationActivity(String twilioId)
     {
         Intent intent = new Intent(this, ConversationActivity.class); // Start user activity
+        intent.putExtra("IsInvited", true);
+        intent.putExtra("twilioId", twilioId);
         this.startActivity(intent);
     }
 
@@ -100,25 +100,30 @@ public class Initialization extends AppCompatActivity {
         @Override
         public void notificationOpened(String message, JSONObject additionalData, boolean isActive) {
             try {
+                Log.d("One signal notification opened", additionalData.toString());
                 if (additionalData != null) {
-                    if (additionalData.has("Conversation") && additionalData.has("twilioId")) { // TODO Naming
-                        String conversationId = additionalData.getString("conversationId");
-                        String twilioId = additionalData.getString("twilioId");
+                    if (additionalData.has("conversationId") && additionalData.has("twilioId")) { // TODO Naming
+                        final String conversationId = additionalData.getString("conversationId");
+                        final String twilioId = additionalData.getString("twilioId");
 
                         Log.d("One Signal Push Accept", "ConversationId: " + conversationId + " twilioId:" + twilioId);
-                        ParseObject conversation = new ParseObject("Conversation");
-                        conversation.get(conversationId);
-                        if (conversation.get("translator") == null) // TODO Can this be done?
-                        {
-                            conversation.put("translator", ParseUser.getCurrentUser().getObjectId());
-                            conversation.saveInBackground();
-                        }
-                        else // if call was already taken
-                        {
-                            Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG);
-                            t.show();
-                            switchToReadyTranslatorActivity();
-                        }
+                        ParseQuery.getQuery("Conversations").getInBackground(conversationId, new GetCallback<ParseObject>() {
+                            @Override
+                            public void done(ParseObject conversation, ParseException e) {
+                                if (conversation.get("translator") == null) // TODO Can this be done?
+                                {
+                                    conversation.put("translator", ParseUser.getCurrentUser().getObjectId());
+                                    conversation.saveInBackground();
+                                    switchToConversationActivity(twilioId);
+                                }
+                                else // if call was already taken
+                                {
+                                    Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG);
+                                    t.show();
+                                    switchToReadyTranslatorActivity();
+                                }
+                            }
+                        });
                     }
                 }
             } catch (Throwable t) {
