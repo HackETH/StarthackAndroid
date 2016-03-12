@@ -17,14 +17,25 @@ public class Initialization extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         OneSignal.startInit(this).init();
-        setContentView(R.layout.activity_initialization);
-
+        Log.d("Init", "1");
         Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
-        ParseUser.enableAutomaticUser(); // Creates an anonymous user if not existent before, user is always logged in afterwards
+        ParseUser.enableAutomaticUser();
+        OneSignal.idsAvailable(
+                new OneSignal.IdsAvailableHandler() {
+                    @Override
+                    public void idsAvailable(String userId, String registrationId) {
+                        ParseUser.getCurrentUser().put("pushID", userId);
 
+                    }
+                }
+        );
+        setContentView(R.layout.activity_initialization);
+        Log.d("Init", "2");
+         // Creates an anonymous user if not existent before, user is always logged in afterwards
+        Log.d("Init", "3");
         ParseUser.getCurrentUser().increment("RunCount");
         ParseUser.getCurrentUser().saveInBackground();
-
+        Log.d("init","4");
         ParseUser currentUser = ParseUser.getCurrentUser();
         if(currentUser.getString("type") == null){
             Intent intentApp = new Intent(this,
@@ -59,7 +70,8 @@ public class Initialization extends AppCompatActivity {
             this.startActivity(intent);
 
         }else{
-            Toast t =  Toast.makeText(getApplicationContext(),"Error",5);
+            int i = 5;
+            Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT);
             t.show();
         }
     }

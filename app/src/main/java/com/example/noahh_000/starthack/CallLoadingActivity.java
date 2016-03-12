@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.onesignal.OneSignal;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -16,6 +17,9 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +62,18 @@ public class CallLoadingActivity extends AppCompatActivity {
                             }
                             else
                             {
+                                for (ParseUser partner:helperList){
+                                    try {
+                                        //TODO: Noah hinzufügen von Daten in JSON wobei data conversationId und twilioId eines selbst enthält
+                                        OneSignal.postNotification(new JSONObject("{'contents': {'en':'Test Message'}, 'include_player_ids': ['" +partner.get("pushID")+ "']}"), null);
+                                    } catch (JSONException err) {
+                                        err.printStackTrace();
+                                    }
+
+                                }
                                 ((TextView)findViewById(R.id.waitText)).setText(helperList.size()+" users were contacted.");
+                                Toast t = Toast.makeText(getApplicationContext(),"Waiting for one to answer...",Toast.LENGTH_LONG);
+                                t.show();
                             }
                         } else {
                             Log.d("callloadingactivity", "callloadingactivity error in query " + e.getMessage());
