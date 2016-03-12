@@ -35,6 +35,7 @@ public class Initialization extends AppCompatActivity {
             this.startActivity(intent);
 
         }
+
         else if (currentUser.getString("type") == "user")
         {
             Intent intent = new Intent(this, MainActivity.class); // Start user activity
