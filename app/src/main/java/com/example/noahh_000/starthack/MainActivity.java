@@ -29,12 +29,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        ParseUser.getCurrentUser().put("type", "user");
         ParseUser.getCurrentUser().saveInBackground();
         final Button button = (Button) findViewById(R.id.help);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
+
+                ParseUser.getCurrentUser().put("type","translator");
+                ParseUser.getCurrentUser().saveInBackground();
                 Intent intentApp = new Intent(v.getContext(),HelperIntroActivity.class);
 
                 v.getContext().startActivity(intentApp);
@@ -46,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         butt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
+                ParseUser.getCurrentUser().put("type","user");
+                ParseUser.getCurrentUser().saveInBackground();
+
                 Log.d("main", "getHelp");
             }
         });
