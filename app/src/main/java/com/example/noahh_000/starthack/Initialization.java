@@ -25,20 +25,22 @@ public class Initialization extends AppCompatActivity {
 
         if (currentUser.getString("type") == "") // User was not set before
         {
-            Intent intent = new Intent(this, MainActivity.class); // Start type picking acticity
-            this.startActivity(intent);
+            Intent intentApp = new Intent(this,
+                    MainActivity.class);
+
+            this.startActivity(intentApp);
 
         }
         else if (currentUser.getString("type") == "translator")
         {
-            Intent intent = new Intent(this, MainActivity.class); // Start translator activity
+            Intent intent = new Intent(this, HelperIntroActivity.class); // Start translator activity
             this.startActivity(intent);
 
         }
 
         else if (currentUser.getString("type") == "user")
         {
-            Intent intent = new Intent(this, MainActivity.class); // Start user activity
+            Intent intent = new Intent(this, HelpedPickerActivity.class); // Start user activity
             this.startActivity(intent);
 
         }else{
