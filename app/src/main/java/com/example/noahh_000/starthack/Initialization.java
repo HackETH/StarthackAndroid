@@ -7,16 +7,23 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.onesignal.OneSignal;
+
+import org.json.JSONObject;
 
 
 public class Initialization extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OneSignal.startInit(this).init();
+        OneSignal.startInit(this)
+                .setNotificationOpenedHandler(new CallAcceptNotificationOpenedHandler())
+                .init();
+
         setContentView(R.layout.activity_initialization);
 
         Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
@@ -59,8 +66,51 @@ public class Initialization extends AppCompatActivity {
             this.startActivity(intent);
 
         }else{
-            Toast t =  Toast.makeText(getApplicationContext(),"Error",5);
+            Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG);
             t.show();
+        }
+    }
+
+    protected void switchToReadyTranslatorActivity()
+    {
+        Intent intent = new Intent(this, ReadyTranslatorActivity.class); // Start user activity
+        this.startActivity(intent);
+    }
+
+    protected void switchToConversationActivity()
+    {
+        Intent intent = new Intent(this, ConversationActivity.class); // Start user activity
+        this.startActivity(intent);
+    }
+
+    private class CallAcceptNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
+        @Override
+        public void notificationOpened(String message, JSONObject additionalData, boolean isActive) {
+            try {
+                if (additionalData != null) {
+                    if (additionalData.has("Conversation") && additionalData.has("twilioId")) { // TODO Naming
+                        String conversationId = additionalData.getString("conversationId");
+                        String twilioId = additionalData.getString("twilioId");
+
+                        Log.d("One Signal Push Accept", "ConversationId: " + conversationId + " twilioId:" + twilioId);
+                        ParseObject conversation = new ParseObject("Conversation");
+                        conversation.get(conversationId);
+                        if (conversation.get("translator") == null) // TODO Can this be done?
+                        {
+                            conversation.put("translator", ParseUser.getCurrentUser().getObjectId());
+                            conversation.saveInBackground();
+                        }
+                        else // if call was already taken
+                        {
+                            Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG);
+                            t.show();
+                            switchToReadyTranslatorActivity();
+                        }
+                    }
+                }
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
         }
     }
 }

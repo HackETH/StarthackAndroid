@@ -131,6 +131,9 @@ public class  ConversationActivity extends AppCompatActivity {
     private boolean wasPreviewing;
     private boolean wasLive;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -272,14 +275,6 @@ public class  ConversationActivity extends AppCompatActivity {
     private void showCallDialog() {
         EditText participantEditText = new EditText(this);
         alertDialog = Dialog.createCallParticipantsDialog(participantEditText, callParticipantClickListener(participantEditText), cancelCallClickListener(), this);
-        alertDialog.show();
-    }
-
-    /*
-     * Creates an incoming conversation UI dialog
-     */
-    private void showInviteDialog(final IncomingInvite incomingInvite) {
-        alertDialog = Dialog.createInviteDialog(incomingInvite.getInvitee(), acceptCallClickListener(incomingInvite), rejectCallClickListener(incomingInvite), this);
         alertDialog.show();
     }
 
@@ -440,33 +435,25 @@ public class  ConversationActivity extends AppCompatActivity {
         };
     }
 
-    private DialogInterface.OnClickListener acceptCallClickListener(
-            final IncomingInvite invite) {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                /*
-                 * Accept incoming invite
-                 */
-                LocalMedia localMedia = setupLocalMedia();
+    private void acceptCall(final IncomingInvite invite)
+    {
+        LocalMedia localMedia = setupLocalMedia();
 
-                invite.accept(localMedia, new ConversationCallback() {
-                    @Override
-                    public void onConversation(Conversation conversation, TwilioConversationsException e) {
-                        Log.e(TAG, "sendConversationInvite onConversation");
-                        if (e == null) {
-                            ConversationActivity.this.conversation = conversation;
-                            conversation.setConversationListener(conversationListener());
-                        } else {
-                            Log.e(TAG, e.getMessage());
-                            hangup();
-                            reset();
-                        }
-                    }
-                });
-                setHangupAction();
+        invite.accept(localMedia, new ConversationCallback() {
+            @Override
+            public void onConversation(Conversation conversation, TwilioConversationsException e) {
+                Log.e(TAG, "sendConversationInvite onConversation");
+                if (e == null) {
+                    ConversationActivity.this.conversation = conversation;
+                    conversation.setConversationListener(conversationListener());
+                } else {
+                    Log.e(TAG, e.getMessage());
+                    hangup();
+                    reset();
+                }
             }
-        };
+        });
+        setHangupAction();
     }
 
     private DialogInterface.OnClickListener rejectCallClickListener(
@@ -734,7 +721,7 @@ public class  ConversationActivity extends AppCompatActivity {
             public void onIncomingInvite(ConversationsClient conversationsClient, IncomingInvite incomingInvite) {
                 conversationStatusTextView.setText("onIncomingInvite");
                 if (conversation == null) {
-                    showInviteDialog(incomingInvite);
+                    acceptCall(incomingInvite); // Immediately accept call
                 } else {
                     Log.w(TAG, String.format("Conversation in progress. Invite from %s ignored", incomingInvite.getInvitee()));
                 }
@@ -828,7 +815,7 @@ public class  ConversationActivity extends AppCompatActivity {
 
     private void retrieveAccessTokenfromServer() {
         Ion.with(this)
-                .load("http://localhost:8000/token.php")
+                .load("http://murmuring-everglades-87090.herokuapp.com/token.php")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
