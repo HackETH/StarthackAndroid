@@ -5,6 +5,9 @@
     <string name="parse_app_id">1sYvxjSWZhqp1hBSfzLTftPau1rBD6B07VrGEqWQ</string>
     <string name="parse_client_key">K2lY94TC18AMim1erOQcaryGTAHBEGoVHJ4iCKPF</string>
     <string name="title_activity_helper_intro">HelperIntroActivity</string>
+    <string name="title_activity_accepting_video">AcceptingVideoActivity</string>
+    <string name="title_activity_conversation">ConversationActivity</string>
 
-
+    <string name="conversationStatus">status</string>
+    <string name="error_retrieving_access_token">Error retrieving token</string>
 </resources>

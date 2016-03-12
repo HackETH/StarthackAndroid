@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.+'
+    compile 'com.koushikdutta.ion:ion:2.1.7'
+    compile 'com.twilio:conversations-android:0.8.1'
 }
