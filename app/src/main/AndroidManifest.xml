@@ -16,7 +16,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Initialization">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,8 @@
         <activity
             android:name=".HelperIntroActivity"
             android:label="@string/title_activity_helper_intro"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".HelpedPickerActivity"></activity>
     </application>
 
 </manifest>
