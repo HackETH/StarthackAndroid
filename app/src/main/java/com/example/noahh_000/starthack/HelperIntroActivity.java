@@ -9,17 +9,26 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class HelperIntroActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_helper_intro);
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
+        ArrayList<Language> languages = LanguageParser.getLanguageList(getApplicationContext());
+        String[] languagesOriginal = new String[languages.size()];
+        int i = 0;
+        for (Language language : languages)
+        {
+            languagesOriginal[i] = language.getOriginal();
+            i++;
+        }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_multiple_choice, values);
+                android.R.layout.simple_list_item_multiple_choice, languagesOriginal);
         getListView().setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
         setListAdapter(adapter);

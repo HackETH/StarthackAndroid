@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("main", "help");
             }
         });
+
         final Button butt = (Button) findViewById(R.id.getHelp);
         butt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
