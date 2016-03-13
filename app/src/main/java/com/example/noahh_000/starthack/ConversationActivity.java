@@ -150,9 +150,8 @@ public class  ConversationActivity extends AppCompatActivity {
         previewFrameLayout = (FrameLayout) findViewById(R.id.previewFrameLayout);
         localContainer = (ViewGroup)findViewById(R.id.localContainer);
         participantContainer = (ViewGroup)findViewById(R.id.participantContainer);
-        conversationStatusTextView = (TextView) findViewById(R.id.conversation_status_textview);
+        //conversationStatusTextView = (TextView) findViewById(R.id.conversation_status_textview);
 
-        callActionFab = (FloatingActionButton) findViewById(R.id.call_action_fab);
         switchCameraActionFab = (FloatingActionButton) findViewById(R.id.switch_camera_action_fab);
         localVideoActionFab = (FloatingActionButton) findViewById(R.id.local_video_action_fab);
         muteActionFab = (FloatingActionButton) findViewById(R.id.mute_action_fab);
@@ -246,7 +245,7 @@ public class  ConversationActivity extends AppCompatActivity {
             setHangupAction();
         } else {
             Log.e(TAG, "invalid participant call");
-            conversationStatusTextView.setText("call participant failed");
+            //conversationStatusTextView.setText("call participant failed");
         }
     }
 
@@ -593,7 +592,7 @@ public class  ConversationActivity extends AppCompatActivity {
         return new ConversationListener() {
             @Override
             public void onParticipantConnected(Conversation conversation, Participant participant) {
-                conversationStatusTextView.setText("onParticipantConnected " + participant.getIdentity());
+                //conversationStatusTextView.setText("onParticipantConnected " + participant.getIdentity());
 
                 participant.setParticipantListener(participantListener());
             }
@@ -601,12 +600,12 @@ public class  ConversationActivity extends AppCompatActivity {
             @Override
             public void onFailedToConnectParticipant(Conversation conversation, Participant participant, TwilioConversationsException e) {
                 Log.e(TAG, e.getMessage());
-                conversationStatusTextView.setText("onFailedToConnectParticipant " + participant.getIdentity());
+                //conversationStatusTextView.setText("onFailedToConnectParticipant " + participant.getIdentity());
             }
 
             @Override
             public void onParticipantDisconnected(Conversation conversation, Participant participant) {
-                conversationStatusTextView.setText("onParticipantDisconnected " + participant.getIdentity());
+                //conversationStatusTextView.setText("onParticipantDisconnected " + participant.getIdentity());
             }
 
             @Override
@@ -644,14 +643,14 @@ public class  ConversationActivity extends AppCompatActivity {
         return new LocalMediaListener() {
             @Override
             public void onLocalVideoTrackAdded(LocalMedia localMedia, LocalVideoTrack localVideoTrack) {
-                conversationStatusTextView.setText("onLocalVideoTrackAdded");
+                //conversationStatusTextView.setText("onLocalVideoTrackAdded");
                 localVideoRenderer = new VideoViewRenderer(ConversationActivity.this, localContainer);
                 localVideoTrack.addRenderer(localVideoRenderer);
             }
 
             @Override
             public void onLocalVideoTrackRemoved(LocalMedia localMedia, LocalVideoTrack localVideoTrack) {
-                conversationStatusTextView.setText("onLocalVideoTrackRemoved");
+                //conversationStatusTextView.setText("onLocalVideoTrackRemoved");
                 localContainer.removeAllViews();
             }
 
@@ -670,7 +669,7 @@ public class  ConversationActivity extends AppCompatActivity {
             @Override
             public void onVideoTrackAdded(Conversation conversation, Participant participant, VideoTrack videoTrack) {
                 Log.i(TAG, "onVideoTrackAdded " + participant.getIdentity());
-                conversationStatusTextView.setText("onVideoTrackAdded " + participant.getIdentity());
+                //conversationStatusTextView.setText("onVideoTrackAdded " + participant.getIdentity());
 
                 // Remote participant
                 participantVideoRenderer = new VideoViewRenderer(ConversationActivity.this, participantContainer);
@@ -694,7 +693,7 @@ public class  ConversationActivity extends AppCompatActivity {
             @Override
             public void onVideoTrackRemoved(Conversation conversation, Participant participant, VideoTrack videoTrack) {
                 Log.i(TAG, "onVideoTrackRemoved " + participant.getIdentity());
-                conversationStatusTextView.setText("onVideoTrackRemoved " + participant.getIdentity());
+                //conversationStatusTextView.setText("onVideoTrackRemoved " + participant.getIdentity());
                 participantContainer.removeAllViews();
 
             }
@@ -728,23 +727,23 @@ public class  ConversationActivity extends AppCompatActivity {
         return new ConversationsClientListener() {
             @Override
             public void onStartListeningForInvites(ConversationsClient conversationsClient) {
-                conversationStatusTextView.setText("onStartListeningForInvites");
+                //conversationStatusTextView.setText("onStartListeningForInvites");
                 resumeInit();
             }
 
             @Override
             public void onStopListeningForInvites(ConversationsClient conversationsClient) {
-                conversationStatusTextView.setText("onStopListeningForInvites");
+                //conversationStatusTextView.setText("onStopListeningForInvites");
             }
 
             @Override
             public void onFailedToStartListening(ConversationsClient conversationsClient, TwilioConversationsException e) {
-                conversationStatusTextView.setText("onFailedToStartListening");
+                //conversationStatusTextView.setText("onFailedToStartListening");
             }
 
             @Override
             public void onIncomingInvite(ConversationsClient conversationsClient, IncomingInvite incomingInvite) {
-                conversationStatusTextView.setText("onIncomingInvite");
+                //conversationStatusTextView.setText("onIncomingInvite");
                 if (conversation == null) {
                     acceptCall(incomingInvite); // Immediately accept call
                 } else {
@@ -754,7 +753,7 @@ public class  ConversationActivity extends AppCompatActivity {
 
             @Override
             public void onIncomingInviteCancelled(ConversationsClient conversationsClient, IncomingInvite incomingInvite) {
-                conversationStatusTextView.setText("onIncomingInviteCancelled");
+                //conversationStatusTextView.setText("onIncomingInviteCancelled");
             }
         };
     }
@@ -778,18 +777,18 @@ public class  ConversationActivity extends AppCompatActivity {
         return new TwilioAccessManagerListener() {
             @Override
             public void onAccessManagerTokenExpire(TwilioAccessManager twilioAccessManager) {
-                conversationStatusTextView.setText("onAccessManagerTokenExpire");
+                //conversationStatusTextView.setText("onAccessManagerTokenExpire");
 
             }
 
             @Override
             public void onTokenUpdated(TwilioAccessManager twilioAccessManager) {
-                conversationStatusTextView.setText("onTokenUpdated");
+                //conversationStatusTextView.setText("onTokenUpdated");
             }
 
             @Override
             public void onError(TwilioAccessManager twilioAccessManager, String s) {
-                conversationStatusTextView.setText("onError");
+                //conversationStatusTextView.setText("onError");
             }
         };
     }
