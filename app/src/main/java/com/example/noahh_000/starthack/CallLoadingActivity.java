@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +31,12 @@ public class CallLoadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_call_loading);
 
         final ParseUser currentUser = ParseUser.getCurrentUser();
 
-        ParseObject conversation = new ParseObject("Conversations");
+        final ParseObject conversation = new ParseObject("Conversations");
         conversation.put("user", currentUser);
         conversation.saveInBackground(new SaveCallback() {
             @Override
@@ -45,12 +47,12 @@ public class CallLoadingActivity extends AppCompatActivity {
                 queryLanguages.add(currentUser.getString("secondLanguage"));
                 query.whereContainsAll("languages", queryLanguages);
 
-                Log.d("callloadingactivity", "Query for matching users: "+queryLanguages.toString());
+                Log.d("callloadingactivity", "Query for matching users: " + queryLanguages.toString());
 
                 query.findInBackground(new FindCallback<ParseUser>() {
                     public void done(List<ParseUser> helperList, ParseException e) {
                         if (e == null) {
-                            Log.d("callloadingactivity", "Query Result: "+helperList.toString());
+                            Log.d("callloadingactivity", "Query Result: " + helperList.toString());
                             if (helperList.size() == 0) {
                                 Context context = getApplicationContext();
                                 CharSequence text = "Sorry there are no matching users.";
@@ -58,23 +60,24 @@ public class CallLoadingActivity extends AppCompatActivity {
 
                                 Toast toast = Toast.makeText(context, text, duration);
                                 toast.show();
-                                //Intent intent = new Intent(getApplication(), HelpedMain.class); // Start translator activity
-                                //getContext().startActivity(intent);
-                            }
-                            else
-                            {
-                                for (ParseUser partner:helperList){
-                                    try {
-                                        //TODO: Noah hinzufügen von Daten in JSON wobei data conversationId und twilioId eines selbst enthält
-                                        OneSignal.postNotification(new JSONObject("{'contents': {'en':'Test Message'}, 'include_player_ids': ['" +partner.get("pushID")+ "']}"), null);
-                                    } catch (JSONException err) {
-                                        err.printStackTrace();
-                                    }
-
+                            } else {
+                                String[] helperArray = new String[helperList.size()];
+                                int i = 0;
+                                for (ParseUser partner : helperList) {
+                                    helperArray[i] = partner.getString("pushID");
+                                    i++;
                                 }
-                                ((TextView)findViewById(R.id.waitText)).setText(helperList.size()+" users were contacted.");
-                                Toast t = Toast.makeText(getApplicationContext(),"Waiting for one to answer...",Toast.LENGTH_LONG);
-                                t.show();
+
+                                String conversationId = conversation.getObjectId();
+                                Context context = getApplicationContext();
+
+                                Intent intent = new Intent(getApplication(), ConversationActivity.class); // Start translator activity
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("isInvited", false);
+                                intent.putExtra("helperArray", helperArray);
+
+                                intent.putExtra("conversationId", conversationId);
+                                context.startActivity(intent);
                             }
                         } else {
                             Log.d("callloadingactivity", "callloadingactivity error in query " + e.getMessage());

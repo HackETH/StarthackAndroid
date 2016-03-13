@@ -48,7 +48,9 @@ public class HelpedPickerActivity extends ListActivity {
                     ParseUser.getCurrentUser().put("firstLanguage", LanguageParser.OriginalToInternational(lang, languages));
                 else
                     ParseUser.getCurrentUser().put("secondLanguage", LanguageParser.OriginalToInternational(lang, languages));
+                ParseUser.getCurrentUser().put("languages", new ArrayList<String>());
                 ParseUser.getCurrentUser().saveInBackground();
+
 
                 Intent intent = new Intent(getApplication(), HelpedMain.class); // Start translator activity
 

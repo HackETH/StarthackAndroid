@@ -44,6 +44,7 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.onesignal.OneSignal;
 import com.twilio.common.TwilioAccessManager;
 import com.twilio.common.TwilioAccessManagerFactory;
 import com.twilio.common.TwilioAccessManagerListener;
@@ -73,6 +74,9 @@ import com.twilio.conversations.TwilioConversationsException;
 import com.twilio.conversations.VideoRendererObserver;
 import com.twilio.conversations.VideoTrack;
 import com.twilio.conversations.VideoViewRenderer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashSet;
 import java.util.List;
@@ -181,12 +185,32 @@ public class  ConversationActivity extends AppCompatActivity {
 
     private void resumeInit()
     {
+
         Intent intent = getIntent();
         boolean isInvited = intent.getBooleanExtra("IsInvited", false);
-        String twilioId = intent.getStringExtra("twilioId");
         if (isInvited)
         {
+            String twilioId = intent.getStringExtra("twilioId");
             sendOutGoingInvite(twilioId);
+        }
+        else
+        {
+            String[] helperArray = intent.getStringArrayExtra("helperArray");
+            String conversationId = intent.getStringExtra("conversationId");
+            for (String helper : helperArray)
+            {
+                try {
+
+                    //OneSignal.postNotification(new JSONObject("{'contents': {'en':'Test Message'}, 'include_player_ids': ['0d14d234-91c3-4429-869b-a78e5f9482a4']}"), null);
+                    if (helper != null && conversationId != null) {
+                        String jsonstring = "{'contents': {'en':'Someone needs your help! Open the app now to translate.'}, 'data': {'conversationId': '" + conversationId + "', 'twilioId':'" + conversationsClient.getIdentity() + "'}, 'include_player_ids': ['" + helper + "']}";
+                        OneSignal.postNotification(new JSONObject(jsonstring), null);
+
+                    }
+                } catch (Exception err) {
+                    err.printStackTrace();
+                }
+            }
         }
     }
 
@@ -295,9 +319,6 @@ public class  ConversationActivity extends AppCompatActivity {
      * The initial state when there is no active conversation.
      */
     private void setCallAction() {
-        callActionFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_call_white_24px));
-        callActionFab.show();
-        callActionFab.setOnClickListener(callActionFabClickListener());
         switchCameraActionFab.show();
         switchCameraActionFab.setOnClickListener(switchCameraClickListener());
         localVideoActionFab.show();
@@ -316,15 +337,6 @@ public class  ConversationActivity extends AppCompatActivity {
         callActionFab.setOnClickListener(hangupClickListener());
         speakerActionFab.show();
         speakerActionFab.setOnClickListener(speakerClickListener());
-    }
-
-    /*
-     * Creates an outgoing conversation UI dialog
-     */
-    private void showCallDialog() {
-        EditText participantEditText = new EditText(this);
-        alertDialog = Dialog.createCallParticipantsDialog(participantEditText, callParticipantClickListener(participantEditText), cancelCallClickListener(), this);
-        alertDialog.show();
     }
 
     /*
@@ -574,15 +586,6 @@ public class  ConversationActivity extends AppCompatActivity {
         };
     }
 
-    private View.OnClickListener callActionFabClickListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCallDialog();
-            }
-        };
-    }
-
     /*
      * Conversation Listener
      */
@@ -609,6 +612,26 @@ public class  ConversationActivity extends AppCompatActivity {
             @Override
             public void onConversationEnded(Conversation conversation, TwilioConversationsException e) {
                 conversationStatusTextView.setText("onConversationEnded");
+
+
+
+                Intent intent = getIntent();
+                boolean isInvited = intent.getBooleanExtra("IsInvited", false);
+                if (isInvited)
+                {
+                    Intent intentApp = new Intent(getApplication(),
+                            ThankYouActivity.class);
+
+                    getApplicationContext().startActivity(intentApp);
+                }
+                else
+                {
+                    Intent intentApp = new Intent(getApplication(),
+                            Initialization.class);
+
+                    getApplicationContext().startActivity(intentApp);
+                }
+
                 reset();
             }
         };

@@ -10,10 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
+import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.lang.reflect.Array;
@@ -26,6 +28,7 @@ public class HelperIntroActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_ACTION_BAR);
         this.languages = LanguageParser.getLanguageList(getApplicationContext());
         setContentView(R.layout.activity_helper_intro);
         String[] languagesOriginal = new String[languages.size()];
@@ -55,6 +58,8 @@ public class HelperIntroActivity extends ListActivity {
                     }
                 }
                 ParseUser.getCurrentUser().put("languages",userslanguages);
+                ParseUser.getCurrentUser().put("firstLanguage", "");
+                ParseUser.getCurrentUser().put("secondLanguage", "");
                 ParseUser.getCurrentUser().saveInBackground();
                 Log.d("HelperIntro", "ListReady");
                 Intent intient = new Intent(v.getContext(), ReadyTranslatorActivity.class); // Start user activity

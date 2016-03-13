@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.parse.GetCallback;
@@ -23,6 +24,7 @@ public class Initialization extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         OneSignal.startInit(this)
                 .setNotificationOpenedHandler(new CallAcceptNotificationOpenedHandler())
                 .init();
@@ -100,7 +102,6 @@ public class Initialization extends AppCompatActivity {
         @Override
         public void notificationOpened(String message, JSONObject additionalData, boolean isActive) {
             try {
-                Log.d("One signal notification opened", additionalData.toString());
                 if (additionalData != null) {
                     if (additionalData.has("conversationId") && additionalData.has("twilioId")) { // TODO Naming
                         final String conversationId = additionalData.getString("conversationId");
@@ -112,7 +113,7 @@ public class Initialization extends AppCompatActivity {
                             public void done(ParseObject conversation, ParseException e) {
                                 if (conversation.get("translator") == null) // TODO Can this be done?
                                 {
-                                    conversation.put("translator", ParseUser.getCurrentUser().getObjectId());
+                                    conversation.put("translator", ParseUser.getCurrentUser());
                                     conversation.saveInBackground();
                                     switchToConversationActivity(twilioId);
                                 }
