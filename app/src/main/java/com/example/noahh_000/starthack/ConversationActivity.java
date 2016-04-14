@@ -1,6 +1,7 @@
 package com.example.noahh_000.starthack;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -128,6 +129,7 @@ public class  ConversationActivity extends AppCompatActivity {
     private FloatingActionButton localVideoActionFab;
     private FloatingActionButton muteActionFab;
     private FloatingActionButton speakerActionFab;
+    private FloatingActionButton hangUpFab;
     private android.support.v7.app.AlertDialog alertDialog;
 
     private boolean muteMicrophone;
@@ -153,10 +155,9 @@ public class  ConversationActivity extends AppCompatActivity {
         //conversationStatusTextView = (TextView) findViewById(R.id.conversation_status_textview);
 
         switchCameraActionFab = (FloatingActionButton) findViewById(R.id.switch_camera_action_fab);
-        localVideoActionFab = (FloatingActionButton) findViewById(R.id.local_video_action_fab);
         muteActionFab = (FloatingActionButton) findViewById(R.id.mute_action_fab);
-        speakerActionFab = (FloatingActionButton) findViewById(R.id.speaker_action_fab);
-
+        hangUpFab = (FloatingActionButton) findViewById(R.id.hang_up_fab);
+        hangUpFab.setOnClickListener(hangupClickListener());
         /*
          * Enable changing the volume using the up/down keys during a conversation
          */
@@ -318,24 +319,20 @@ public class  ConversationActivity extends AppCompatActivity {
      * The initial state when there is no active conversation.
      */
     private void setCallAction() {
+
         switchCameraActionFab.show();
         switchCameraActionFab.setOnClickListener(switchCameraClickListener());
         localVideoActionFab.show();
         localVideoActionFab.setOnClickListener(localVideoClickListener());
         muteActionFab.show();
         muteActionFab.setOnClickListener(muteClickListener());
-        speakerActionFab.hide();
     }
 
     /*
      * The actions performed during hangup.
      */
     private void setHangupAction() {
-        callActionFab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_call_end_white_24px));
-        callActionFab.show();
-        callActionFab.setOnClickListener(hangupClickListener());
-        speakerActionFab.show();
-        speakerActionFab.setOnClickListener(speakerClickListener());
+
     }
 
     /*
@@ -387,6 +384,7 @@ public class  ConversationActivity extends AppCompatActivity {
         } else if(outgoingInvite != null){
             outgoingInvite.cancel();
         }
+        this.finish();
     }
 
     /*
@@ -415,9 +413,7 @@ public class  ConversationActivity extends AppCompatActivity {
         localVideoActionFab.setImageDrawable(
                 ContextCompat.getDrawable(ConversationActivity.this,
                         R.drawable.ic_videocam_green_24px));
-        speakerActionFab.setImageDrawable(
-                ContextCompat.getDrawable( ConversationActivity.this,
-                        R.drawable.ic_volume_down_green_24px));
+
         if (conversationsClient != null) {
             conversationsClient.setAudioOutput(AudioOutput.HEADSET);
         }
