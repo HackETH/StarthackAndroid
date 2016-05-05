@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.noahh_000.starthack.HelpedMain">
-
+    android:paddingTop="0dp"
+    tools:context=".activities.UserHomeScreenActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Please choose"
         android:id="@+id/firstLanguage"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/textView3" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,38 +33,18 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Please choose"
         android:id="@+id/secondLanguage"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="85dp"
         android:layout_below="@+id/firstLanguage"
-        android:layout_alignStart="@+id/firstLanguage" />
+        android:layout_alignLeft="@+id/firstLanguage" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Make Call"
+        android:text="@string/helped_main_makecall"
         android:id="@+id/helpButton"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="#05AE00" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="I speak:"
-        android:id="@+id/textView"
-        android:layout_above="@+id/secondLanguage"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="I need help with:"
-        android:id="@+id/textView2"
-        android:layout_alignTop="@+id/secondLanguage"
-        android:layout_alignStart="@+id/textView4" />
+        android:background="@color/colorAccent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,10 +52,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Hi"
         android:id="@+id/textView3"
+        android:textIsSelectable="false"
+        android:textSize="40dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textIsSelectable="false"
-        android:textSize="40dp" />
+        android:layout_marginTop="70dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -77,10 +65,10 @@
         android:text="Select the language you speak &amp; the language you need help with and then make the call."
         android:id="@+id/textView4"
         android:gravity="center_vertical|center"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentEnd="true"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="30dp"/>
+        android:layout_above="@+id/firstLanguage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="41dp" />
 
 </RelativeLayout>

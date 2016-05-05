@@ -7,6 +7,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.noahh_000.starthack.Initialization">
+    tools:context=".activities.InitializationActivity"
+    android:background="@color/colorPrimary">
 
+
+        <ImageView
+            android:layout_width="173dp"
+            android:layout_height="239dp"
+            android:id="@+id/imageView"
+            android:src="@drawable/ic_appicon"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/app_name"
+            android:id="@+id/textView"
+            android:textSize="40dp"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/textContrast"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true" />
 </RelativeLayout>

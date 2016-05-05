@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,6 +18,7 @@
         android:id="@+id/localContainer"
         android:layout_width="154dp"
         android:layout_height="154dp"
+        android:layout_marginBottom="100dp"
         android:layout_gravity="start|bottom" />
 
     <LinearLayout
@@ -37,12 +39,27 @@
             android:src = "@drawable/ic_call_end_white_24px"
             android:layout_margin="@dimen/fab_margin"
 
-            />
+            android:background="#de3333"
+            app:backgroundTint="#d83333" />
 
         <FrameLayout
             android:id="@+id/participantContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+            <!--<com.example.noahh_000.starthack.activities.LoadingCallAnimationDrawableView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/loadViewConversation"
+                android:layout_gravity="center" />-->
+        </FrameLayout>
+
+    <!--<ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="visible"
+        android:layout_gravity="center"/>-->
 
 
 </FrameLayout>

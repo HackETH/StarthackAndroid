@@ -20,37 +20,36 @@
             android:value="DISABLE" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.UndecidedPickRoleActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Initialization">
+        <activity android:name=".activities.InitializationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".HelperIntroActivity"
+            android:name=".activities.TranslatorLanguagePickerActivity"
             android:label="@string/title_activity_helper_intro" />
-        <activity android:name=".HelpedPickerActivity" />
-        <activity android:name=".HelpedMain"
+        <activity android:name=".activities.UserLanguagePickerActivity" />
+        <activity android:name=".activities.UserHomeScreenActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".CallLoadingActivity" />
+        <activity android:name=".activities.CallLoadingActivity" />
         <activity
-            android:name=".AcceptingVideoActivity"
-            android:label="@string/title_activity_accepting_video"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ConversationActivity"
+            android:name=".activities.TranslatorVideoCallActivity"
             android:label="@string/title_activity_conversation"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ReadyTranslatorActivity"
+            android:name=".activities.UserVideoCallActivity"
+            android:label="@string/title_activity_conversation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.TranslatorIsReadyActivity"
             android:label="@string/title_activity_ready_translator"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ThankYouActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+
     </application>
 
 </manifest>

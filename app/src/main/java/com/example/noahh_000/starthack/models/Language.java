@@ -1,4 +1,4 @@
-package com.example.noahh_000.starthack;
+package com.example.noahh_000.starthack.models;
 
 /**
  * Created by NoahH_000 on 12.03.2016.

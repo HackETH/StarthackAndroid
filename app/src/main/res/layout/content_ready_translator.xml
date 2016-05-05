@@ -7,7 +7,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.noahh_000.starthack.HelpedMain">
+    tools:context=".activities.UserHomeScreenActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
