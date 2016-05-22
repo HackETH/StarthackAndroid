@@ -1,4 +1,4 @@
-package com.example.noahh_000.starthack;
+package com.example.noahh_000.starthack.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,11 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.example.noahh_000.starthack.R;
+import com.example.noahh_000.starthack.models.ActivityNavigationModel;
+import com.example.noahh_000.starthack.models.CurrentApplicationModel;
+import com.example.noahh_000.starthack.models.SettingsModel;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -17,82 +22,101 @@ import com.onesignal.OneSignal;
 
 import org.json.JSONObject;
 
+import java.util.List;
 
-public class Initialization extends AppCompatActivity {
 
+public class InitializationActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    ParseUser currentUser;
+
+    /* API INITIALIZATION
+    * OneSignal, Parse */
+    private void initializeAPI()
+    {
         OneSignal.startInit(this)
                 .setNotificationOpenedHandler(new CallAcceptNotificationOpenedHandler())
                 .init();
 
-        setContentView(R.layout.activity_initialization);
-
         Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
+
         ParseUser.enableAutomaticUser();
+        /* ParseUser.getCurrentUser().increment("RunCount");
+        ParseUser.getCurrentUser().saveInBackground(); */
+
+        currentUser = ParseUser.getCurrentUser();
+    }
+
+    /* This is executed after the APIS have been initialized */
+    private void onInitialized()
+    {
         OneSignal.idsAvailable(
                 new OneSignal.IdsAvailableHandler() {
                     @Override
                     public void idsAvailable(String userId, String registrationId) {
-                        ParseUser.getCurrentUser().put("pushID", userId);
+                        currentUser.put("pushID", userId);
                     }
                 }
         );
+    }
+
+    /* Executed only on first run */
+    private void onFirstRun()
+    {
+            deleteUserswithPushID();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_initialization);
-        ParseUser.getCurrentUser().increment("RunCount");
-        ParseUser.getCurrentUser().saveInBackground();
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if(currentUser.getString("type") == null){
-            Intent intentApp = new Intent(this,
-                    MainActivity.class);
 
-            this.startActivity(intentApp);
+        initializeAPI();
+        onInitialized();
+
+        SettingsModel SM = new SettingsModel(this);
+        boolean isFirstRun = SM.getSettingB(SettingsModel.Setting.FIRSTRUN);
+        if (isFirstRun) {
+            onFirstRun();
+            SM.setSettingB(SettingsModel.Setting.FIRSTRUN, false);
         }
-        else if (currentUser.getString("type").equals("")) // User was not set before
-        {
-            Intent intentApp = new Intent(this,
-                    MainActivity.class);
 
-            this.startActivity(intentApp);
+        CurrentApplicationModel currentUserModel = new CurrentApplicationModel();
+        CurrentApplicationModel.Role role = currentUserModel.getRole();
 
-        }
-        else if (currentUser.getString("type").equals( "translator"))
-        {
-            if (currentUser.getList("languages").isEmpty()){
-                Intent intent = new Intent(this, HelperIntroActivity.class); // Start translator activity
-                this.startActivity(intent);
-            }else{
-                Intent intent = new Intent(this, ReadyTranslatorActivity.class);
-                this.startActivity(intent);
+        if(role == CurrentApplicationModel.Role.UNDECIDED)
+            ActivityNavigationModel.InitializationAsUndecided.makeTransition(this);
+        else if (role == CurrentApplicationModel.Role.TRANSLATOR)
+            ActivityNavigationModel.InitializationAsTranslator.makeTransition(this);
+        else if (role == CurrentApplicationModel.Role.USER)
+            ActivityNavigationModel.InitializationAsUser.makeTransition(this);
+    }
+
+    private void deleteUserswithPushID()
+    {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("pushID", ParseUser.getCurrentUser().get("pushID"));
+        query.findInBackground(new FindCallback<ParseUser>() {
+
+            @Override
+            public void done(List<ParseUser> userList, com.parse.ParseException e) {
+                userList.remove(ParseUser.getCurrentUser());
+                for (ParseUser user : userList)
+                    user.deleteEventually();
             }
-
-
-        }
-
-        else if (currentUser.getString("type").equals("user"))
-        {
-            Intent intent = new Intent(this, HelpedMain.class); // Start user activity
-            this.startActivity(intent);
-
-        }else{
-            int i = 5;
-            Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_SHORT);
-            t.show();
-        }
+        });
     }
 
     protected void switchToReadyTranslatorActivity()
     {
-        Intent intent = new Intent(this, ReadyTranslatorActivity.class); // Start user activity
+        Intent intent = new Intent(this, TranslatorIsReadyActivity.class); // Start user activity
         this.startActivity(intent);
     }
 
     protected void switchToConversationActivity(String twilioId)
     {
-        Intent intent = new Intent(this, ConversationActivity.class); // Start user activity
+        Intent intent = new Intent(this, VideoCallActivity.class); // Start user activity
         intent.putExtra("IsInvited", true);
         intent.putExtra("twilioId", twilioId);
         this.startActivity(intent);
@@ -103,7 +127,7 @@ public class Initialization extends AppCompatActivity {
         public void notificationOpened(String message, JSONObject additionalData, boolean isActive) {
             try {
                 if (additionalData != null) {
-                    if (additionalData.has("conversationId") && additionalData.has("twilioId")) { // TODO Naming
+                    if (additionalData.has("conversationId") && additionalData.has("twilioId")) {
                         final String conversationId = additionalData.getString("conversationId");
                         final String twilioId = additionalData.getString("twilioId");
 

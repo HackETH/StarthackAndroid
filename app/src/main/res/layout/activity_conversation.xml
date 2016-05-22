@@ -20,7 +20,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_switch_camera_512dp" />
+            android:src="@drawable/ic_switch_camera_512dp"
+            app:backgroundTint="#999" />
+
 
 
         <android.support.design.widget.FloatingActionButton
@@ -29,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_mic_green_24px" />
+            android:src="@drawable/ic_mic_green_24px"
+            app:backgroundTint="#999" />
     </FrameLayout>
 
 

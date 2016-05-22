@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.noahh_000.starthack.CallLoadingActivity"
+    tools:context=".activities.CallLoadingActivity"
     android:theme="@android:style/Theme.NoTitleBar">
 
     <TextView
@@ -17,6 +17,13 @@
         android:text="Finding someone to help ..."
         android:id="@+id/waitText"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/loadTypeTextView"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

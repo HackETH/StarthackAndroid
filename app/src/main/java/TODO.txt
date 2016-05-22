@@ -1,0 +1,5 @@
+ConversationModel erstellen
+ActivityNavigations einfügen
+Lifecycles beachten
+LanguageModel überarbeiten
+Listener benutzen

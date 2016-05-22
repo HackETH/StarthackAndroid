@@ -1,28 +1,24 @@
-package com.example.noahh_000.starthack;
+package com.example.noahh_000.starthack.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.parse.LogInCallback;
 
 import android.view.Window;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseAnonymousUtils;
+import com.example.noahh_000.starthack.R;
+import com.example.noahh_000.starthack.models.ActivityNavigationModel;
 import com.parse.ParseUser;
 
-import java.text.ParseException;
+public class UndecidedPickRoleActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +26,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
         ParseUser.getCurrentUser().saveInBackground();
+
+        context = this;
+
         final Button button = (Button) findViewById(R.id.help);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
 
-                ParseUser.getCurrentUser().put("type","translator");
+                ParseUser.getCurrentUser().put("type", "translator");
                 ParseUser.getCurrentUser().saveInBackground();
-                Intent intentApp = new Intent(v.getContext(),HelperIntroActivity.class);
 
-                v.getContext().startActivity(intentApp);
+                ActivityNavigationModel.PickRoleTranslator.makeTransition(context);
+
                 Log.d("main", "help");
             }
         });
@@ -53,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 // Perform action on click
                 ParseUser.getCurrentUser().put("type", "user");
                 ParseUser.getCurrentUser().saveInBackground();
-                Intent intentApp = new Intent(v.getContext(), HelpedMain.class);
 
-                v.getContext().startActivity(intentApp);
+                ActivityNavigationModel.PickRoleUser.makeTransition(context);
+
                 Log.d("main", "getHelp");
             }
         });
