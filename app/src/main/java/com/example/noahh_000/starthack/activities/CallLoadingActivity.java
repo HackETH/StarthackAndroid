@@ -12,6 +12,7 @@ import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.ActivityNavigationModel;
 import com.example.noahh_000.starthack.models.CurrentApplicationModel;
 import com.example.noahh_000.starthack.models.CurrentUserModel;
+import com.example.noahh_000.starthack.models.ErrorModel;
 import com.example.noahh_000.starthack.models.UserModel;
 import com.onesignal.OneSignal;
 import com.parse.FindCallback;
@@ -28,6 +29,7 @@ import java.util.logging.Handler;
 
 public class CallLoadingActivity extends AppCompatActivity {
 
+    private final String TAG = this.getClass().getName();
     private TextView loadTypeTextView;
     private ParseObject currentConversation;
     private CurrentUserModel currentUserModel;
@@ -57,8 +59,12 @@ public class CallLoadingActivity extends AppCompatActivity {
         // Create a new Comversation
         currentConversation = new ParseObject("Conversations");
         currentConversation.put("user", currentUserModel.getCurrentUser());
-        currentConversation.saveInBackground();
-
+        try {
+            currentConversation.save();
+        } catch (Exception e){
+            ErrorModel.e(TAG, "error saving conversation"+e);
+        }
+        String id = currentConversation.getObjectId();
         // Get a list of users with the languages that are spoken by one self
         // and send all of them a push notification
         UserModel.getTranslatorsWithPreferredLanguages(
@@ -112,26 +118,28 @@ public class CallLoadingActivity extends AppCompatActivity {
 
         String conversationId = currentConversation.getObjectId();
         String twilioId = currentUserModel.getTwilioId();
-
+        String strhelperlist = new String("");
         // For each matching user send out a push notification to that conversation
         for (String helper : helperArray)
         {
-            try {
                 if (helper != null && conversationId != null) {
-                    String jsonstring = "{" +
-                            "'contents': {'en':'Someone needs your help! Open the app now to translate.'}" +
-                            ", 'data': {" +
-                                "'conversationId': '" + conversationId + "'" +
-                                ", 'twilioId':'" + twilioId + "'}" +
-                                ", 'include_player_ids': ['" + helper + "']" +
-                            "}";
-                    OneSignal.postNotification(new JSONObject(jsonstring), null);
-                }
-            } catch (Exception err) {
-                err.printStackTrace();
-            }
-        }
+                    strhelperlist = strhelperlist  + ",'" + helper+"'";
 
+                }
+        }
+        strhelperlist = strhelperlist.substring(1);
+        try {
+        String jsonstring = "{" +
+                "'contents': {'en':'Someone needs your help! Open the app now to translate.'}" +
+                ", 'data': {" +
+                "'conversationId': '" + conversationId + "'" +
+                ", 'twilioId':'" + twilioId + "'}" +
+                ", 'include_player_ids': [" + strhelperlist + "]" +
+                "}";
+        OneSignal.postNotification(new JSONObject(jsonstring), null);
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
         waitOnTranslatorToConnect();
 
     }
@@ -141,7 +149,14 @@ public class CallLoadingActivity extends AppCompatActivity {
         ParseQuery.getQuery("Conversations").getInBackground(currentConversation.getObjectId(), new GetCallback<ParseObject>() {
             @Override
             public void done(ParseObject conversation, ParseException e) {
-                if (conversation.get("translator") == null)
+                if (currentConversation.getObjectId() != null){
+                    Log.d("CallLoadingAct","ID:"+currentConversation.getObjectId());
+
+                }else{
+                    Log.d("CallLoadingAct","No ObjectId of currenctConversation");
+
+                }
+                if (conversation != null && conversation.get("translator") != null)
                 {
                     ActivityNavigationModel.UserFoundTranslatorStartVideoCall.makeTransition(context, conversation.getObjectId());
                 }

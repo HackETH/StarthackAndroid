@@ -87,8 +87,6 @@ public class TranslatorVideoCallActivity extends VideoCallActivity {
     // This is called after the AccessToken was received by server and all listeners were started
     protected void initializationDone()
     {
-        // Send an invite to the user whos conversation was accepted
-        // TODO: What if he is already in a call
         sendOutGoingInvite(contactTwilioId);
     }
 

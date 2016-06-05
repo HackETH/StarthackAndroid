@@ -2,6 +2,8 @@ package com.example.noahh_000.starthack.models;
 
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
+
 /**
  * Created by NoahH_000 on 03.05.2016.
  */
@@ -47,10 +49,11 @@ public class CurrentApplicationModel {
 
     public void reset()
     {
-        currentUser.put("languages", "");
+        currentUser.put("languages", new ArrayList<String>());
         currentUser.put("firstLanguage", "");
         currentUser.put("secondLanguage", "");
         currentUser.put("type", "");
+        currentUser.saveInBackground();
     }
 
     public ParseUser getCurrentUser()
@@ -60,6 +63,6 @@ public class CurrentApplicationModel {
 
     public String getTwilioId()
     {
-        return currentUser.getString("twilioId");
+        return currentUser.getString("twilioIdentity");
     }
 }

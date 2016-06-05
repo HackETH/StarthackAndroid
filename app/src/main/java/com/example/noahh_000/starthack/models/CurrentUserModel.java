@@ -18,13 +18,23 @@ public class CurrentUserModel extends CurrentApplicationModel{
     public String getFirstLanguage()
     {
         String fl = currentUser.getString("firstLanguage");
-        return (fl.equals("")) ? null : fl;
+        if (fl == null){
+            return null;
+        }else{
+            return (fl.equals("")) ? null : fl;
+
+        }
     }
 
     public String getSecondLanguage()
     {
         String sl = currentUser.getString("secondLanguage");
-        return (sl.equals("")) ? null : sl;
+        if(sl == null){
+            return null;
+        }else{
+            return (sl.equals("")) ? null : sl;
+
+        }
     }
 
     public void setFirstLanguage(String firstLanguage)

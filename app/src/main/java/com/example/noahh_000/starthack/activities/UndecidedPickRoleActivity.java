@@ -14,10 +14,15 @@ import android.widget.Button;
 
 import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.ActivityNavigationModel;
+import com.example.noahh_000.starthack.models.ErrorModel;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import com.parse.ParseException;
 
 public class UndecidedPickRoleActivity extends AppCompatActivity {
 
+    private final String TAG = this.getClass().getName();
     private Context context;
 
     @Override
@@ -49,9 +54,19 @@ public class UndecidedPickRoleActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Perform action on click
                 ParseUser.getCurrentUser().put("type", "user");
-                ParseUser.getCurrentUser().saveInBackground();
+                ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            ActivityNavigationModel.PickRoleUser.makeTransition(context);
+                        } else {
+                            ErrorModel.e(TAG, e.toString());
+                        }
+                    }
 
-                ActivityNavigationModel.PickRoleUser.makeTransition(context);
+                });
+
+
 
                 Log.d("main", "getHelp");
             }

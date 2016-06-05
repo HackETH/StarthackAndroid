@@ -15,7 +15,7 @@
             android:layout_width="173dp"
             android:layout_height="239dp"
             android:id="@+id/imageView"
-            android:src="@drawable/ic_appicon"
+            android:src="@drawable/ic_call_end_white_24px"
             android:layout_gravity="center_horizontal"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />

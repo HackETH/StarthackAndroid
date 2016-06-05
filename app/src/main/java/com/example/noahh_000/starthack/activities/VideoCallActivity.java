@@ -27,6 +27,8 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.onesignal.OneSignal;
+import com.parse.Parse;
+import com.parse.ParseUser;
 import com.twilio.common.TwilioAccessManager;
 import com.twilio.common.TwilioAccessManagerFactory;
 import com.twilio.common.TwilioAccessManagerListener;
@@ -784,6 +786,10 @@ public abstract class VideoCallActivity extends AppCompatActivity {
                         if (e == null) {
                             // The identity can be used to receive calls
                             String identity = result.get("identity").getAsString();
+
+                            ParseUser.getCurrentUser().put("twilioIdentity", identity);
+                            ParseUser.getCurrentUser().saveInBackground();
+
                             String accessToken = result.get("token").getAsString();
 
                             startWaitingOnCalls(accessToken);

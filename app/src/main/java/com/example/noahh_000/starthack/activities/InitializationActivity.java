@@ -40,8 +40,8 @@ public class InitializationActivity extends AppCompatActivity {
         Parse.initialize(this, getString(R.string.parse_app_id), getString(R.string.parse_client_key));
 
         ParseUser.enableAutomaticUser();
-        /* ParseUser.getCurrentUser().increment("RunCount");
-        ParseUser.getCurrentUser().saveInBackground(); */
+        ParseUser.getCurrentUser().increment("RunCount");
+        ParseUser.getCurrentUser().saveInBackground();
 
         currentUser = ParseUser.getCurrentUser();
     }
@@ -116,7 +116,7 @@ public class InitializationActivity extends AppCompatActivity {
 
     protected void switchToConversationActivity(String twilioId)
     {
-        Intent intent = new Intent(this, VideoCallActivity.class); // Start user activity
+        Intent intent = new Intent(this, TranslatorVideoCallActivity.class); // Start user activity
         intent.putExtra("IsInvited", true);
         intent.putExtra("twilioId", twilioId);
         this.startActivity(intent);

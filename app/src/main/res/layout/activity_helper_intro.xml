@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_check_white_24dp" />
+        android:src="@drawable/common_google_signin_btn_icon_light_pressed" />
 
 </android.support.design.widget.CoordinatorLayout>
