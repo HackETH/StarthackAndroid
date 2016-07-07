@@ -1,6 +1,7 @@
 package com.example.noahh_000.starthack.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -64,10 +65,10 @@ public class TranslatorVideoCallActivity extends VideoCallActivity {
     private String contactTwilioId;
     private String conversationId;
     private CurrentTranslatorModel currentTranslatorModel;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
         // Get the data that was transmitted to the activity, that is the conversationId of the accepted Converation and the
         // users twilioId to send him an invite
@@ -75,13 +76,16 @@ public class TranslatorVideoCallActivity extends VideoCallActivity {
         contactTwilioId = intent[0];
         conversationId = intent[1];
 
+        context = this.getApplicationContext();
+
         currentTranslatorModel = new CurrentTranslatorModel();
+        super.onCreate(savedInstanceState);
     }
 
     // Handle all errors that were not specially treated
-    protected void handleUncaughtError(Exception e)
-    {
-
+    protected void handleUncaughtError(String tag, Exception e) {
+        Log.e(TAG, "Video call: "+tag+"  "+e.toString());
+        //ActivityNavigationModel.InitializationAsTranslator.makeTransition(context);
     }
 
     // This is called after the AccessToken was received by server and all listeners were started
@@ -93,18 +97,18 @@ public class TranslatorVideoCallActivity extends VideoCallActivity {
     // This is called after we ended the conversation
     protected void handleConversationEnded(Conversation conversation, TwilioConversationsException e)
     {
-
+        super.logout();
     }
 
     // This is called when the other participant disconnected
     protected void handleConversationDisconnected(Conversation conversation)
     {
-
+        super.logout();
     }
 
     // This is called when an incoming invite was cancelled by the current user
     protected void handleIncomingInviteCancelled(ConversationsClient conversationsClient, IncomingInvite incomingInvite)
     {
-
+        super.logout();
     }
 }

@@ -18,13 +18,13 @@ public class CurrentTranslatorModel extends CurrentApplicationModel{
 
     public void setLanguages(ArrayList<String> languages)
     {
-        currentUser.put("languages", languages);
-        currentUser.saveInBackground();
+        ParseUser.getCurrentUser().put("languages", languages);
+        ParseUser.getCurrentUser().saveInBackground();
     }
 
     public ArrayList<String> getLanguages()
     {
-        ArrayList<String> languages = (ArrayList)currentUser.getList("languages");
+        ArrayList<String> languages = (ArrayList)ParseUser.getCurrentUser().getList("languages");
 
         return (languages == null) ? new ArrayList<String>() : languages;
     }

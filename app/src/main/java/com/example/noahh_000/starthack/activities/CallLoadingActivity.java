@@ -17,6 +17,7 @@ import com.example.noahh_000.starthack.models.UserModel;
 import com.onesignal.OneSignal;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -58,7 +59,7 @@ public class CallLoadingActivity extends AppCompatActivity {
 
         // Create a new Comversation
         currentConversation = new ParseObject("Conversations");
-        currentConversation.put("user", currentUserModel.getCurrentUser());
+        currentConversation.put("user", ParseUser.getCurrentUser());
         try {
             currentConversation.save();
         } catch (Exception e){

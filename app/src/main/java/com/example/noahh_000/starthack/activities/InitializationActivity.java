@@ -62,7 +62,7 @@ public class InitializationActivity extends AppCompatActivity {
     /* Executed only on first run */
     private void onFirstRun()
     {
-            deleteUserswithPushID();
+            //deleteUserswithPushID();
     }
 
     @Override
@@ -93,21 +93,6 @@ public class InitializationActivity extends AppCompatActivity {
             ActivityNavigationModel.InitializationAsUser.makeTransition(this);
     }
 
-    private void deleteUserswithPushID()
-    {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("pushID", ParseUser.getCurrentUser().get("pushID"));
-        query.findInBackground(new FindCallback<ParseUser>() {
-
-            @Override
-            public void done(List<ParseUser> userList, com.parse.ParseException e) {
-                userList.remove(ParseUser.getCurrentUser());
-                for (ParseUser user : userList)
-                    user.deleteEventually();
-            }
-        });
-    }
-
     protected void switchToReadyTranslatorActivity()
     {
         Intent intent = new Intent(this, TranslatorIsReadyActivity.class); // Start user activity
@@ -135,18 +120,21 @@ public class InitializationActivity extends AppCompatActivity {
                         ParseQuery.getQuery("Conversations").getInBackground(conversationId, new GetCallback<ParseObject>() {
                             @Override
                             public void done(ParseObject conversation, ParseException e) {
-                                if (conversation.get("translator") == null) // TODO Can this be done?
-                                {
-                                    conversation.put("translator", ParseUser.getCurrentUser());
-                                    conversation.saveInBackground();
-                                    switchToConversationActivity(twilioId);
+                                if (e == null) {
+                                    if (conversation.get("translator") == null) // TODO Can this be done?
+                                    {
+                                        conversation.put("translator", ParseUser.getCurrentUser());
+                                        conversation.saveInBackground();
+                                        switchToConversationActivity(twilioId);
+                                    } else // if call was already taken
+                                    {
+                                        Toast t = Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG);
+                                        t.show();
+                                        switchToReadyTranslatorActivity();
+                                    }
                                 }
-                                else // if call was already taken
-                                {
-                                    Toast t =  Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG);
-                                    t.show();
-                                    switchToReadyTranslatorActivity();
-                                }
+                                else
+                                    Log.e("", e.toString());
                             }
                         });
                     }

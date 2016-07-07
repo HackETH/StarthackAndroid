@@ -2,6 +2,8 @@ package com.example.noahh_000.starthack.models;
 
 import android.util.Log;
 
+import com.parse.ParseUser;
+
 /**
  * Created by NoahH_000 on 05.05.2016.
  */
@@ -17,7 +19,7 @@ public class CurrentUserModel extends CurrentApplicationModel{
 
     public String getFirstLanguage()
     {
-        String fl = currentUser.getString("firstLanguage");
+        String fl = ParseUser.getCurrentUser().getString("firstLanguage");
         if (fl == null){
             return null;
         }else{
@@ -28,7 +30,7 @@ public class CurrentUserModel extends CurrentApplicationModel{
 
     public String getSecondLanguage()
     {
-        String sl = currentUser.getString("secondLanguage");
+        String sl = ParseUser.getCurrentUser().getString("secondLanguage");
         if(sl == null){
             return null;
         }else{
@@ -39,13 +41,13 @@ public class CurrentUserModel extends CurrentApplicationModel{
 
     public void setFirstLanguage(String firstLanguage)
     {
-        currentUser.put("firstLanguage", firstLanguage);
-        currentUser.saveInBackground();
+        ParseUser.getCurrentUser().put("firstLanguage", firstLanguage);
+        ParseUser.getCurrentUser().saveInBackground();
     }
 
     public void setSecondLanguage(String secondLanguage)
     {
-        currentUser.put("secondLanguage", secondLanguage);
-        currentUser.saveInBackground();
+        ParseUser.getCurrentUser().put("secondLanguage", secondLanguage);
+        ParseUser.getCurrentUser().saveInBackground();
     }
 }

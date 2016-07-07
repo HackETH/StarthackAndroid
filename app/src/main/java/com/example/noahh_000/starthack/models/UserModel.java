@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -25,14 +26,11 @@ public class UserModel
         queryLanguages.add(firstLanguage);
         queryLanguages.add(secondLanguage);
         query.whereContainsAll("languages", queryLanguages);
+        query.whereNotEqualTo("pushID", ParseUser.getCurrentUser().get("pushID"));
+        query.whereEqualTo("type", "translator");
 
         Log.v(TAG, "Query for matching users [" + queryLanguages.toString()+"]");
 
         query.findInBackground(fcallback);
-    }
-
-    public static void sendPushNotificationToUserList()
-    {
-
     }
 }

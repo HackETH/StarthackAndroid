@@ -133,9 +133,10 @@ public class UserVideoCallActivity extends VideoCallActivity {
     }
 
     // Handle all errors that were not specially treated
-    protected void handleUncaughtError(Exception e)
+    protected void handleUncaughtError(String tag, Exception e)
     {
-        ActivityNavigationModel.InitializationAsUser.makeTransition(context);
+        Log.e(TAG, "Video call: " + tag + "  " + e.toString());
+        //ActivityNavigationModel.InitializationAsUser.makeTransition(context);
     }
 
     // This is called after the AccessToken was received by server and all listeners were started
@@ -149,7 +150,8 @@ public class UserVideoCallActivity extends VideoCallActivity {
 
         // Create a new Comversation
         currentConversation = new ParseObject("Conversations");
-        currentConversation.put("user", currentUserModel.getCurrentUser());
+        currentConversation = new ParseObject("Conversations");
+        currentConversation.put("user", ParseUser.getCurrentUser());
         try {
             currentConversation.save();
         } catch (Exception e){
@@ -181,18 +183,21 @@ public class UserVideoCallActivity extends VideoCallActivity {
     // This is called after we ended the conversation
     protected void handleConversationEnded(Conversation conversation, TwilioConversationsException e)
     {
+        super.logout();
         ActivityNavigationModel.InitializationAsUser.makeTransition(context);
     }
 
     // This is called when the other participant disconnected
     protected void handleConversationDisconnected(Conversation conversation)
     {
+        super.logout();
         ActivityNavigationModel.InitializationAsUser.makeTransition(context);
     }
 
     // This is called when an incoming invite was cancelled by the current user
     protected void handleIncomingInviteCancelled(ConversationsClient conversationsClient, IncomingInvite incomingInvite)
     {
+        super.logout();
         ActivityNavigationModel.InitializationAsUser.makeTransition(context);
     }
 }

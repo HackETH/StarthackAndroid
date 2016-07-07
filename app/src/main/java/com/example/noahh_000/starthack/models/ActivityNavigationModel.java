@@ -22,6 +22,7 @@ public class ActivityNavigationModel {
         public static void makeTransition(Context context)
         {
             Intent intentApp = new Intent(context, TranslatorIsReadyActivity.class);
+            intentApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentApp);
         }
     }
@@ -56,6 +57,7 @@ public class ActivityNavigationModel {
         public static void makeTransition(Context context)
         {
             Intent intentApp = new Intent(context, UserHomeScreenActivity.class);
+            intentApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intentApp);
         }
     }

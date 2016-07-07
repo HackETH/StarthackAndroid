@@ -14,6 +14,8 @@ import android.widget.Button;
 
 import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.ActivityNavigationModel;
+import com.example.noahh_000.starthack.models.CurrentApplicationModel;
+import com.example.noahh_000.starthack.models.CurrentUserModel;
 import com.example.noahh_000.starthack.models.ErrorModel;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -58,20 +60,21 @@ public class UndecidedPickRoleActivity extends AppCompatActivity {
                     @Override
                     public void done(ParseException e) {
                         if (e == null) {
-                            ActivityNavigationModel.PickRoleUser.makeTransition(context);
+
                         } else {
                             ErrorModel.e(TAG, e.toString());
                         }
                     }
 
                 });
-
+                ActivityNavigationModel.PickRoleUser.makeTransition(context);
 
 
                 Log.d("main", "getHelp");
             }
         });
-
+        CurrentApplicationModel currentApplicationModel = new CurrentUserModel();
+        //currentApplicationModel.deletUsersWithSamePushId();
 
     }
 

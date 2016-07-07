@@ -113,7 +113,7 @@ public abstract class VideoCallActivity extends AppCompatActivity {
     private final String SERVER_ACCESSTOKEN_REQUEST_URL = "http://murmuring-everglades-87090.herokuapp.com/token.php";
 
     // Handle all errors that were not specially treated
-    protected abstract void handleUncaughtError(Exception e);
+    protected abstract void handleUncaughtError(String tag, Exception e);
 
     // This is called after the AccessToken was received by server and all listeners were started
     protected abstract void initializationDone();
@@ -129,32 +129,52 @@ public abstract class VideoCallActivity extends AppCompatActivity {
 
     // This is called after we ended the conversation
     protected void handleStartListeningError(TwilioConversationsException e) {
-        handleUncaughtError(e);
+        handleUncaughtError("Start Listening", e);
+    }
+
+    protected void handleParticipantConnected()
+    {
+        Log.d(TAG, "Video call: Participant connected");
+    }
+
+    protected void handleStartListening()
+    {
+        Log.d(TAG, "Video call: Started Listening");
+    }
+
+    protected void handleStopListening()
+    {
+        Log.d(TAG, "Video call: Stopped Listening");
+    }
+
+    protected void handleAccessTokenExpire()
+    {
+        Log.e(TAG, "Access Token expired!");
     }
 
     // This is called after we ended the conversation
     protected void handleConversationConnectError(Conversation conversation, TwilioConversationsException e) {
-        handleUncaughtError(e);
+        handleUncaughtError("conversation connection", e);
     }
 
     // This is called when an incoming invite was cancelled by the current user
     protected void handleStartCallFailed(TwilioConversationsException e) {
-        handleUncaughtError(e);
+        handleUncaughtError("cstart call",e);
     }
 
     // This is called when an incoming invite was cancelled by the current user
     protected void handleInvalidParticipantCall() {
-        handleUncaughtError(null);
+        handleUncaughtError("invalid participant",null);
     }
 
     // This is called when an incoming invite was cancelled by the current user
     protected void handleFailedToInitializeTwilioSDK(Exception e) {
-        handleUncaughtError(e);
+        handleUncaughtError("initialize sdk",e);
     }
 
     // This is called when an incoming invite was cancelled by the current user
     protected void handleGetAccessTokenError(Exception e) {
-        handleUncaughtError(e);
+        handleUncaughtError("get access token",e);
     }
 
     @Override
@@ -190,6 +210,43 @@ public abstract class VideoCallActivity extends AppCompatActivity {
         setCallAction();
     }
 
+    protected void logout() {
+
+        // Teardown preview
+        if (cameraCapturer != null && cameraCapturer.isPreviewing()) {
+            stopPreview();
+            cameraCapturer = null;
+        }
+
+        conversation = null;
+
+        // Lets unlisten first otherwise complete logout
+        if (conversationsClient != null && conversationsClient.isListening()) {
+            conversationsClient.unlisten();
+            completeLogout();
+        } else {
+            completeLogout();
+        }
+    }
+
+    /*
+     * Once all conversations have been ended and invites are no longer being listened for, the
+     * Conversations SDK can be torn down
+     */
+    private void completeLogout() {
+
+        conversationsClient = null;
+        destroyConversationsSdk();
+
+        finish();
+    }
+
+    private void destroyConversationsSdk() {
+        TwilioConversations.destroy();
+    }
+
+
+
     /* Starts the listeners to wait for an incoming call
     *
     * This is called after the Initialization->TwilioInitAPI->AccessTokenFromServer was finished */
@@ -215,7 +272,7 @@ public abstract class VideoCallActivity extends AppCompatActivity {
         // Register to receive incoming invites
         conversationsClient.listen();
 
-        initializationDone();
+
     }
 
     /*
@@ -242,7 +299,7 @@ public abstract class VideoCallActivity extends AppCompatActivity {
 
 
     /* Invites Participant with twilioId participant */
-    protected void sendOutGoingInvite(String participant)
+    protected void sendOutGoingInvite(final String participant)
     {
         if (!participant.isEmpty() && (conversationsClient != null)) {
             stopPreview();
@@ -263,9 +320,10 @@ public abstract class VideoCallActivity extends AppCompatActivity {
                                 VideoCallActivity.this.conversation = conversation;
                                 conversation.setConversationListener(conversationListener());
                             } else {
-                                handleStartCallFailed(e);
+                                //handleStartCallFailed(e);
                                 hangup();
                                 reset();
+                                sendOutGoingInvite(participant);
                             }
                         }
                     });
@@ -364,6 +422,9 @@ public abstract class VideoCallActivity extends AppCompatActivity {
                     handleFailedToInitializeTwilioSDK(e);
                 }
             });
+        } else {
+            completeLogout();
+            initializeTwilioSdk();
         }
     }
 
@@ -556,6 +617,7 @@ public abstract class VideoCallActivity extends AppCompatActivity {
                 //((LoadingCallAnimationDrawableView)findViewById(R.id.loadViewConversation)).endAnimation();
                 localContainer.setVisibility(View.VISIBLE);
                 participant.setParticipantListener(participantListener());
+                handleParticipantConnected();
             }
 
             @Override
@@ -670,10 +732,13 @@ public abstract class VideoCallActivity extends AppCompatActivity {
         return new ConversationsClientListener() {
             @Override
             public void onStartListeningForInvites(ConversationsClient conversationsClient) {
+                handleStartListening();
+                initializationDone();
             }
 
             @Override
             public void onStopListeningForInvites(ConversationsClient conversationsClient) {
+                handleStopListening();
             }
 
             @Override
@@ -721,6 +786,7 @@ public abstract class VideoCallActivity extends AppCompatActivity {
         return new TwilioAccessManagerListener() {
             @Override
             public void onAccessManagerTokenExpire(TwilioAccessManager twilioAccessManager) {
+                handleAccessTokenExpire();
             }
 
             @Override
