@@ -79,7 +79,7 @@ public class UserHomeScreenActivity extends AppCompatActivity {
         ((Button)findViewById(R.id.helpButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplication(), UserVideoCallActivity.class); // Start translator activity
+                Intent intent = new Intent(getApplication(), UserAudioCallActivity.class); // Start translator activity
                 v.getContext().startActivity(intent);
             }
         });

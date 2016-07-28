@@ -106,6 +106,11 @@ public class InitializationActivity extends AppCompatActivity {
         intent.putExtra("twilioId", twilioId);
         this.startActivity(intent);
     }
+    protected  void switchToAudioConversationActivity(String reachHimHere){
+        Intent intent = new Intent(this, TranslatorAudioCallActivity.class); // Start user activity
+        intent.putExtra("reachHimHere", reachHimHere);
+        this.startActivity(intent);
+    }
 
     private class CallAcceptNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
         @Override
@@ -115,7 +120,7 @@ public class InitializationActivity extends AppCompatActivity {
                     if (additionalData.has("conversationId") && additionalData.has("twilioId")) {
                         final String conversationId = additionalData.getString("conversationId");
                         final String twilioId = additionalData.getString("twilioId");
-
+                        final String reachMeHere = additionalData.getString("reachMeHere");
                         Log.d("One Signal Push Accept", "ConversationId: " + conversationId + " twilioId:" + twilioId);
                         ParseQuery.getQuery("Conversations").getInBackground(conversationId, new GetCallback<ParseObject>() {
                             @Override
@@ -125,7 +130,7 @@ public class InitializationActivity extends AppCompatActivity {
                                     {
                                         conversation.put("translator", ParseUser.getCurrentUser());
                                         conversation.saveInBackground();
-                                        switchToConversationActivity(twilioId);
+                                        switchToAudioConversationActivity(reachMeHere);
                                     } else // if call was already taken
                                     {
                                         Toast t = Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG);

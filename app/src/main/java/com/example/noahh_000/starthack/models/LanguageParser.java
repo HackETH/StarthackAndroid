@@ -4,12 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by NoahH_000 on 12.03.2016.
@@ -21,7 +20,7 @@ public class LanguageParser {
     {
         generateLanguageList(context);
     }
-
+    private static String TAG = "language parser";
     public ArrayList<Language> getLanguages()
     {
         return languages;
@@ -60,10 +59,10 @@ public class LanguageParser {
             XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
             XmlPullParser parser = xmlFactoryObject.newPullParser();
 
-            InputStream stream = context.getResources().getAssets().open("languages.plist");
+            InputStream stream = context.getResources().getAssets().open("com/example/noahh_000/starthack/assets/languages.plist");
 
             parser.setInput(stream, null);
-
+            Log.d(TAG, "generateLanguageList:"+stream);
             int event = parser.getEventType();
             while (event != XmlPullParser.END_DOCUMENT)
             {
