@@ -6,8 +6,11 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.parse.ParseUser;
+import com.twilio.client.Connection;
+import com.twilio.client.Device;
 
 /**
  * Created by samuelmueller on 28.07.16.
@@ -15,6 +18,15 @@ import com.parse.ParseUser;
 public class TranslatorAudioCallActivity extends AudioCallActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         ParseUser user = ParseUser.getCurrentUser();
         clientProfile = new ClientProfile(user.getObjectId(), true, false);
 
@@ -31,8 +43,14 @@ public class TranslatorAudioCallActivity extends AudioCallActivity {
              */
             initializeTwilioClientSDK();
         }
+    }
+
+    @Override
+    protected void deviceCreated() {
+        super.deviceCreated();
         Intent intent = getIntent();
         String callThisId = intent.getStringExtra("reachHimHere");
         connect(callThisId,false);
     }
+
 }

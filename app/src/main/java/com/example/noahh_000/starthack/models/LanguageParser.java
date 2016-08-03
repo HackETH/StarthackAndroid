@@ -6,7 +6,9 @@ import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -59,8 +61,23 @@ public class LanguageParser {
             XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
             XmlPullParser parser = xmlFactoryObject.newPullParser();
 
-            InputStream stream = context.getResources().getAssets().open("com/example/noahh_000/starthack/assets/languages.plist");
-
+            String exampleString = "<language original=\"Deutsch\" international=\"German\"/>\n" +
+                    "       <language original=\"中文\" international=\"Mandarin\"/>\n" +
+                    "       <language original=\"English\" international=\"English\"/>\n" +
+                    "       <language international=\"Swedish\" original=\"Svenska\"/>\n" +
+                    "       <language international=\"Cebuano\" original=\"Sinugboanong Binisaya\"/>\n" +
+                    "       <language international=\"Dutch\" original=\"Nederlands\"/>\n" +
+                    "       <language international=\"French\" original=\"Français\"/>\n" +
+                    "       <language international=\"Russian\" original=\"Русский\"/>\n" +
+                    "       <language international=\"Italian\" original=\"Italiano\"/>\n" +
+                    "       <language international=\"Spanish\" original=\"Español\"/>\n" +
+                    "       <language international=\"Polish\" original=\"Polski\"/>\n" +
+                    "       <language international=\"Vietnamese\" original=\"Tiếng Việt\"/>\n" +
+                    "       <language international=\"Japanese\" original=\"日本語\"/>\n" +
+                    "       <language international=\"Portuguese\" original=\"Português\"/>\n" +
+                    "       <language international=\"Serbo Croatian\" original=\"Srpskohrvatski / Српскохрватски\"/>\n" +
+                    "       <language international=\"Persian\" original=\"فارسی\"/>\n";
+            InputStream stream = new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8));
             parser.setInput(stream, null);
             Log.d(TAG, "generateLanguageList:"+stream);
             int event = parser.getEventType();

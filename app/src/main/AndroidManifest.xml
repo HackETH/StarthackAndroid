@@ -26,16 +26,17 @@
         <activity android:name=".activities.InitializationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.TranslatorLanguagePickerActivity"
             android:label="@string/title_activity_helper_intro" />
         <activity android:name=".activities.UserLanguagePickerActivity" />
-        <activity android:name=".activities.UserHomeScreenActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activities.UserHomeScreenActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CallLoadingActivity" />
         <activity
             android:name=".activities.TranslatorVideoCallActivity"
@@ -49,6 +50,27 @@
             android:name=".activities.TranslatorIsReadyActivity"
             android:label="@string/title_activity_ready_translator"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.TranslatorAudioCallActivity"
+            android:label="@string/title_activity_ready_translator"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.UserAudioCallActivity"
+            android:label="@string/title_activity_ready_translator"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".NotificationExtender"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.onesignal.NotificationExtender" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.twilio.client.TwilioClientService"
+            android:exported="false"
+            android:stopWithTask="true" />
 
     </application>
 

@@ -1,13 +1,18 @@
 package com.example.noahh_000.starthack.activities;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.CurrentUserModel;
 import com.example.noahh_000.starthack.models.ErrorModel;
 import com.example.noahh_000.starthack.models.UserModel;
@@ -17,6 +22,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.twilio.client.Connection;
+import com.twilio.client.impl.sound.SoundPool;
 
 import org.json.JSONObject;
 
@@ -28,16 +34,28 @@ import java.util.List;
 public class UserAudioCallActivity extends AudioCallActivity{
     private ParseObject currentConversation;
     private CurrentUserModel currentUserModel;
-
+    private List<ParseUser> helpers;
+    private MediaPlayer mPlayer;
+    int streamId;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ParseUser user = ParseUser.getCurrentUser();
-        clientProfile = new ClientProfile(user.getObjectId(), false, true);
+        //clientProfile = new ClientProfile("Hans", true, true);
+        clientProfile = new ClientProfile(user.getObjectId(), true, true);
         /*
          * Needed for setting/abandoning audio focus during call
          */
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setMode(AudioManager.STREAM_MUSIC);
+        audioManager.setSpeakerphoneOn(false);
+        audioManager.setStreamVolume (AudioManager.STREAM_MUSIC,10,0);
+
+        mPlayer = MediaPlayer.create(getApplicationContext(), R.raw.beep); // in 2nd param u have to pass your desire ringtone
+        //mPlayer.prepare();
+
+        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mPlayer.start();
+        mPlayer.setLooping(true);
 
         if (!checkPermissionForMicrophone()) {
             requestPermissionForMicrophone();
@@ -67,13 +85,55 @@ public class UserAudioCallActivity extends AudioCallActivity{
                         if (e == null) { // Successfully fetched Users
                             Log.d("callloadingactivity", "Query Result: " + helperList.toString());
                             contactUserListCallback(helperList);
+                            helpers = helperList;
                         } else {
                             Log.d("callloadingactivity", "callloadingactivity error in query " + e.getMessage());
                         }
                     }
                 });
 
+
     }
+    @Override
+    public void onConnecting(Connection connection) {
+        super.onConnecting(connection);
+        mPlayer.stop();
+        String[] helperArray = new String[helpers.size()];
+        int i = 0;
+        for (ParseUser partner : helpers) {
+            helperArray[i] = partner.getString("pushID");
+            i++;
+        }
+
+        String conversationId = currentConversation.getObjectId();
+        String twilioId = currentUserModel.getTwilioId();
+        String strhelperlist = new String("");
+        // For each matching user send out a push notification to that conversation
+        for (String helper : helperArray)
+        {
+            if (helper != null && conversationId != null) {
+                strhelperlist = strhelperlist  + ",'" + helper+"'";
+
+            }
+        }
+        strhelperlist = strhelperlist.substring(1);
+        try {
+
+            String jsonstring = "{" +
+                    "'contents': {'en':'Someone needs your help in audio! Open the app now to translate.'}" +
+                    ", 'data': {" +
+                    "'conversationId': '" + conversationId + "'" +
+                    ", 'twilioId':'" + twilioId + "'" +
+                    ", 'deleteAll':true}" +
+                    ", 'include_player_ids': [" + strhelperlist + "]" +
+                    ", 'content_available': true"+
+                    "}";
+            OneSignal.postNotification(new JSONObject(jsonstring), null);
+        } catch (Exception err) {
+            err.printStackTrace();
+        }
+    }
+
     private void contactUserListCallback(List<ParseUser> helperList)
     {
         if (helperList.size() == 0) { // No users were found
@@ -90,6 +150,12 @@ public class UserAudioCallActivity extends AudioCallActivity{
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+    @Override
+    protected void leavingWindow(){
+        if (mPlayer.isPlaying()){
+            mPlayer.stop();
+        }
     }
     private void contactUserListFull(List<ParseUser> helperList)
     {

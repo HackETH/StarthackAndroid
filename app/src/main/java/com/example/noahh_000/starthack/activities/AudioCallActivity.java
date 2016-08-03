@@ -52,7 +52,7 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
     /*
      * A Device is the primary entry point to Twilio Services
      */
-    private Device clientDevice;
+    protected Device clientDevice;
 
     /*
      * A Connection represents a connection between a Device and Twilio Services.
@@ -111,7 +111,8 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
         hangUpActionFab.setOnClickListener(hangupActionFabClickListener());
         muteActionFab.setOnClickListener(muteMicrophoneFabClickListener());
         speakerActionFab.setOnClickListener(toggleSpeakerPhoneFabClickListener());
-
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        speakerPhone = false;
     }
 
     protected void initializeTwilioClientSDK() {
@@ -139,6 +140,12 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
                     Toast.makeText(AudioCallActivity.this, "Failed to initialize the Twilio Client SDK", Toast.LENGTH_LONG).show();
                 }
             });
+        }else{
+            if (clientDevice != null){
+                deviceCreated();
+            }else{
+                retrieveCapabilityToken(clientProfile);
+            }
         }
     }
 
@@ -160,9 +167,10 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
                  *  If you're using a BroadcastReceiver, override BroadcastReceiver.onReceive().
                  */
 
-                Intent intent = new Intent(getApplicationContext(), AudioCallActivity.class);
+                Intent intent = new Intent(getApplicationContext(), UserAudioCallActivity.class);
                 PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 clientDevice.setIncomingIntent(pendingIntent);
+                deviceCreated();
             } else {
                 clientDevice.updateCapabilityToken(capabilityToken);
             }
@@ -172,6 +180,9 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
             Log.e(TAG, "An error has occured updating or creating a Device: \n" + e.toString());
             Toast.makeText(AudioCallActivity.this, "Device error", Toast.LENGTH_SHORT).show();
         }
+    }
+    protected void deviceCreated(){
+
     }
 
     @Override
@@ -284,10 +295,13 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
      */
     private void answer() {
         //always accept, but what if already have connection???
-        pendingConnection.accept();
-        pendingConnection.setConnectionListener(this);
-        connection = pendingConnection;
-        pendingConnection = null;
+        if (pendingConnection != null){
+            pendingConnection.accept();
+            pendingConnection.setConnectionListener(this);
+            connection = pendingConnection;
+            pendingConnection = null;
+        }
+
     }
     /* Device Listener */
     @Override
@@ -340,6 +354,7 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                     }
                 });
             }
@@ -357,6 +372,7 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        finish();
                     }
                 });
             }
@@ -467,12 +483,16 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
             }
         };
     }
+    protected void leavingWindow(){
+
+    }
 
     private View.OnClickListener hangupActionFabClickListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 disconnect();
+                leavingWindow();
                 finish();
 
             }

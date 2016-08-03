@@ -117,11 +117,11 @@ public class InitializationActivity extends AppCompatActivity {
         public void notificationOpened(String message, JSONObject additionalData, boolean isActive) {
             try {
                 if (additionalData != null) {
-                    if (additionalData.has("conversationId") && additionalData.has("twilioId")) {
+                    if (additionalData.has("conversationId") && additionalData.has("reachMeHere")) {
                         final String conversationId = additionalData.getString("conversationId");
-                        final String twilioId = additionalData.getString("twilioId");
                         final String reachMeHere = additionalData.getString("reachMeHere");
-                        Log.d("One Signal Push Accept", "ConversationId: " + conversationId + " twilioId:" + twilioId);
+                        Log.d("One Signal Push Accept", "ConversationId: " + conversationId);
+                        switchToAudioConversationActivity(reachMeHere);
                         ParseQuery.getQuery("Conversations").getInBackground(conversationId, new GetCallback<ParseObject>() {
                             @Override
                             public void done(ParseObject conversation, ParseException e) {
@@ -130,7 +130,6 @@ public class InitializationActivity extends AppCompatActivity {
                                     {
                                         conversation.put("translator", ParseUser.getCurrentUser());
                                         conversation.saveInBackground();
-                                        switchToAudioConversationActivity(reachMeHere);
                                     } else // if call was already taken
                                     {
                                         Toast t = Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG);
