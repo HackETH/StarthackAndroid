@@ -11,7 +11,6 @@
     android:paddingTop="0dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.UndecidedPickRoleActivity"
-    tools:showIn="@layout/activity_main"
     android:weightSum="1">
 
 
@@ -44,13 +43,13 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ich will helfen!"
+            android:text="@string/undecided_pickrole_iwanttohelp"
             android:id="@+id/help" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "Ich brauche Hilfe."
+            android:text = "@string/undecided_pickrole_ineedhelp"
             android:id="@+id/getHelp" />
     </LinearLayout>
 

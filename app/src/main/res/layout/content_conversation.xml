@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.twilio.example.quickstart.ConversationActivity"
-    tools:showIn="@layout/activity_conversation">
+    tools:showIn="@layout/activity_both_conversation">
 
     <FrameLayout
         android:id="@+id/previewFrameLayout"

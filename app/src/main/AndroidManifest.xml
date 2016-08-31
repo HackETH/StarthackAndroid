@@ -18,17 +18,25 @@
         <meta-data
             android:name="com.onesignal.NotificationOpened.DEFAULT"
             android:value="DISABLE" />
-
+        <!-- This activity is the starting activity
+        it will not be accessible by back navigation -->
         <activity
-            android:name=".activities.UndecidedPickRoleActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.InitializationActivity">
+            android:name=".activities.InitializationActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.UndecidedPickRoleActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.UndecidedPickRoleActivity" />
         </activity>
         <activity
             android:name=".activities.TranslatorLanguagePickerActivity"

@@ -3,7 +3,6 @@ package com.example.noahh_000.starthack.activities;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -14,17 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Chronometer;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noahh_000.starthack.R;
-import com.parse.Parse;
-import  com.parse.ParseUser;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.twilio.client.Connection;
@@ -70,6 +64,9 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
     protected FloatingActionButton muteActionFab;
     protected FloatingActionButton speakerActionFab;
     protected FloatingActionButton hangUpActionFab;
+
+    private Context context;
+
     protected class ClientProfile {
         private String name;
         private boolean allowOutgoing = true;
@@ -104,7 +101,7 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_audio_call);
+        setContentView(R.layout.activity_both_audio_call);
         hangUpActionFab = (FloatingActionButton) findViewById(R.id.hang_up_fab);
         muteActionFab = (FloatingActionButton) findViewById(R.id.mute_fab);
         speakerActionFab = (FloatingActionButton) findViewById(R.id.speaker_fab);
@@ -414,7 +411,7 @@ public class AudioCallActivity extends AppCompatActivity implements DeviceListen
                 initializeTwilioClientSDK();
             } else {
                 Toast.makeText(this,
-                        "Microphone permissions needed. Please allow in App Settings for additional functionality.",
+                        "aaa", //getResources().getString(R.string.audiocall_please_allow_microphone)
                         Toast.LENGTH_LONG).show();
             }
         }

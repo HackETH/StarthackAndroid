@@ -1,6 +1,5 @@
 package com.example.noahh_000.starthack.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.ActivityNavigationModel;
-import com.example.noahh_000.starthack.models.CurrentApplicationModel;
 import com.example.noahh_000.starthack.models.CurrentTranslatorModel;
 
 public class TranslatorIsReadyActivity extends AppCompatActivity {
@@ -25,7 +22,7 @@ public class TranslatorIsReadyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ready_translator);
+        setContentView(R.layout.activity_translator_main);
         context = this;
 
         Toolbar tb = (Toolbar) findViewById(R.id.my_toolbar);

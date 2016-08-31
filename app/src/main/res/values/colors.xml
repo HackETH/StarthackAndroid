@@ -6,4 +6,8 @@
     <color name="colorAccent">#00C853</color>
     <color name="textContrast">#FFFFFF</color>
     <color name="textStandard">#000000</color>
+
+    <color name="list_row_default_bg">#ffffff</color>
+    <color name="list_row_pressed_bg">#008cef</color>
+    <color name="list_row_selected_bg">#86d3f6</color>
 </resources>

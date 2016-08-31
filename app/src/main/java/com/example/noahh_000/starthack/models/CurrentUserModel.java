@@ -50,4 +50,15 @@ public class CurrentUserModel extends CurrentApplicationModel{
         ParseUser.getCurrentUser().put("secondLanguage", secondLanguage);
         ParseUser.getCurrentUser().saveInBackground();
     }
+
+    public void setCountry (String country)
+    {
+        ParseUser.getCurrentUser().put("country", country);
+        ParseUser.getCurrentUser().saveInBackground();
+    }
+
+    public String getCountry ()
+    {
+        return ParseUser.getCurrentUser().getString("country");
+    }
 }

@@ -1,48 +1,45 @@
 package com.example.noahh_000.starthack.activities;
 
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.View;
 import android.view.Window;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 
 import com.example.noahh_000.starthack.R;
-import com.example.noahh_000.starthack.models.CurrentApplicationModel;
-import com.example.noahh_000.starthack.models.Language;
-import com.example.noahh_000.starthack.models.LanguageParser;
-import com.parse.ParseUser;
+import com.example.noahh_000.starthack.models.ListElement;
+import com.example.noahh_000.starthack.models.ListParser;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
 public abstract class LanguagePickerActivity extends ListActivity {
-    LanguageParser languageParser;
+    ListParser languageParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_ACTION_BAR);
 
-        languageParser = new LanguageParser(this.getApplicationContext());
+        languageParser = getParserInstance();
 
-        setContentView(R.layout.activity_helper_intro);
-        String[] languagesOriginal = new String[languageParser.getLanguages().size()];
+        setContentView(R.layout.activity_both_language_picker);
+        String[] languagesOriginal = new String[languageParser.getList().size()];
         int i = 0;
-        for (Language language : languageParser.getLanguages())
+        for (ListElement language : languageParser.getList())
         {
-            languagesOriginal[i] = language.getOriginal();
+            languagesOriginal[i] = language.getShow();
             i++;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_multiple_choice, languagesOriginal);
+                getListStyle(), languagesOriginal);
         setListAdapter(adapter);
     }
+
+    abstract protected int getListStyle();
+
+    abstract protected ListParser getParserInstance();
 
     protected ArrayList<String> getPickedLanguageList()
     {
@@ -52,8 +49,8 @@ public abstract class LanguagePickerActivity extends ListActivity {
         for (int i = 0; i < getListView().getAdapter().getCount(); i++) {
             if (checked.get(i)) {
                 // Do something
-                Log.d("HelperIntro", String.valueOf(languageParser.getLanguages().get(i).getOriginal()));
-                userslanguages.add(languageParser.getLanguages().get(i).getInternational());
+                Log.d("HelperIntro", String.valueOf(languageParser.getList().get(i).getShow()));
+                userslanguages.add(languageParser.getList().get(i).getData());
             }
         }
 

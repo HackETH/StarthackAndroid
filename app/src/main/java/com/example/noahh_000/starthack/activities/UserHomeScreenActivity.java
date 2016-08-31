@@ -15,12 +15,9 @@ import android.widget.TextView;
 
 import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.ActivityNavigationModel;
-import com.example.noahh_000.starthack.models.CurrentApplicationModel;
+import com.example.noahh_000.starthack.models.CountryParser;
 import com.example.noahh_000.starthack.models.CurrentUserModel;
-import com.example.noahh_000.starthack.models.Language;
 import com.example.noahh_000.starthack.models.LanguageParser;
-
-import java.util.ArrayList;
 
 public class UserHomeScreenActivity extends AppCompatActivity {
     private static String TAG = UserHomeScreenActivity.class.getName();
@@ -29,6 +26,7 @@ public class UserHomeScreenActivity extends AppCompatActivity {
 
     private CurrentUserModel currentUserModel;
     private LanguageParser languageParser;
+    private CountryParser countryParser;
 
     private Context context;
 
@@ -36,11 +34,12 @@ public class UserHomeScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_helped_main);
+        setContentView(R.layout.activity_user_main);
 
         context = this;
 
         languageParser = new LanguageParser(getApplicationContext());
+        countryParser = new CountryParser(getApplicationContext());
         currentUserModel = new CurrentUserModel();
 
         Toolbar tb = (Toolbar) findViewById(R.id.my_toolbar);
@@ -53,12 +52,14 @@ public class UserHomeScreenActivity extends AppCompatActivity {
         secondLanguageTextView = ((TextView)findViewById(R.id.secondLanguage));
 
         if (currentUserModel.getFirstLanguage() != null)
-            firstLanguageTextView.setText(languageParser.InternationalToOriginal(currentUserModel.getFirstLanguage()));
+            firstLanguageTextView.setText(languageParser.DataToShow(currentUserModel.getFirstLanguage()));
         else
             firstLanguageTextView.setText(R.string.user_home_screen_choose_native);
 
-        if (currentUserModel.getSecondLanguage() != null)
-            secondLanguageTextView.setText(languageParser.InternationalToOriginal(currentUserModel.getSecondLanguage()));
+        if (currentUserModel.getSecondLanguage() != null) {
+            String data = currentUserModel.getCountry() + "|" + currentUserModel.getSecondLanguage();
+            secondLanguageTextView.setText(countryParser.DataToShow(data));
+        }
         else
             secondLanguageTextView.setText(R.string.user_home_screen_choose_alien);
 

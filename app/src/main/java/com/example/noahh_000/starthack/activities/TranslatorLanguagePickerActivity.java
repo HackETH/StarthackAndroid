@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.CurrentTranslatorModel;
@@ -50,7 +51,7 @@ public class TranslatorLanguagePickerActivity extends LanguagePickerActivity {
                 ErrorModel.e(TAG, "A Language was chosen that is not part of the list");
         }
 
-        final FloatingActionButton butt = (FloatingActionButton) findViewById(R.id.fab);
+        final Button butt = (Button) findViewById(R.id.fab);
         butt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 savePickedLanguages();
@@ -59,11 +60,21 @@ public class TranslatorLanguagePickerActivity extends LanguagePickerActivity {
         });
     }
 
+    protected int getListStyle()
+    {
+        return android.R.layout.simple_list_item_multiple_choice;
+    }
+
+    public LanguageParser getParserInstance()
+    {
+        return new LanguageParser(this);
+    }
+
     private int getAdapterItemPosition(String name)
     {
         for (int position=0; position<getListView().getCount(); position++) {
             String item = getListView().getItemAtPosition(position).toString();
-            item = languageParser.OriginalToInternational(item);
+            item = languageParser.ShowToData(item);
             if (item.equals(name))
                 return position;
         }

@@ -1,7 +1,6 @@
 package com.example.noahh_000.starthack.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -32,7 +31,7 @@ public class UndecidedPickRoleActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_undecided_pickrole);
         ParseUser.getCurrentUser().saveInBackground();
 
         context = this;
@@ -67,7 +66,7 @@ public class UndecidedPickRoleActivity extends AppCompatActivity {
                     }
 
                 });
-                ActivityNavigationModel.PickRoleUser.makeTransition(context);
+                ActivityNavigationModel.UserLanguagePickerStart.makeTransition(context, true);
 
 
                 Log.d("main", "getHelp");

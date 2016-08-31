@@ -2,7 +2,6 @@ package com.example.noahh_000.starthack.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -26,8 +25,6 @@ import com.example.noahh_000.starthack.R;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.onesignal.OneSignal;
-import com.parse.Parse;
 import com.parse.ParseUser;
 import com.twilio.common.TwilioAccessManager;
 import com.twilio.common.TwilioAccessManagerFactory;
@@ -58,8 +55,6 @@ import com.twilio.conversations.TwilioConversationsException;
 import com.twilio.conversations.VideoRendererObserver;
 import com.twilio.conversations.VideoTrack;
 import com.twilio.conversations.VideoViewRenderer;
-
-import org.json.JSONObject;
 
 public abstract class VideoCallActivity extends AppCompatActivity {
 
@@ -180,7 +175,7 @@ public abstract class VideoCallActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversation);
+        setContentView(R.layout.activity_both_conversation);
 
         /*
          * Load views from resources

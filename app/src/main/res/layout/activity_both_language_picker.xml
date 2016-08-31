@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:paddingBottom="0dp"
+android:paddingLeft="0dp"
+android:paddingRight="0dp"
+android:paddingTop="0dp"
+tools:context=".activities.UserHomeScreenActivity"
+android:background="#FFFFFF">
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar_top"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:minHeight="?attr/actionBarSize"
+    android:background="@color/colorPrimary">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test string that will be changed"
+        android:layout_gravity="left"
+        android:textColor="#FFFFFF"
+        android:id="@+id/toolbar_title"
+        android:textSize="@dimen/textMedium"/>
+</android.support.v7.widget.Toolbar>
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/both_language_picker_save_language"
+    android:id="@+id/fab"
+    android:layout_alignParentBottom="true"
+    android:background="@color/colorPrimary" />
+
+<ListView
+    android:id="@android:id/list"
+    android:layout_height="484dp"
+    android:layout_width="match_parent"
+    android:background="#FFFFFF"
+    android:layout_alignParentStart="true"
+    android:layout_below="@+id/toolbar_top"
+    android:layout_above="@id/fab"
+    android:listSelector="@drawable/list_color_selector"/>
+
+
+
+</RelativeLayout>

@@ -16,8 +16,6 @@
     <string name="error_retrieving_access_token">Error retrieving token</string>
     <string name="title_activity_ready_translator">ReadyTranslatorActivity</string>
 
-    <string name="helped_main_makecall">Make Call</string>
-
     <string name="dialog_switch_role_title">Do you want to switch your role?</string>
     <string name="dialog_switch_role_confirm">Yes</string>
 
@@ -25,4 +23,24 @@
 
     <string name="user_home_screen_choose_native">Choose the language you speak</string>
     <string name="user_home_screen_choose_alien">Choose the language you need translated</string>
+
+    <string name="user_language_picker_select_first">What language do you know best?</string>
+    <string name="user_language_picker_select_country">In which country do you live?</string>
+
+    <string name="audiocall_please_allow_microphone">"Microphone permissions needed. Please allow in App Settings for additional functionality."</string>
+
+    <string name="both_language_picker_save_language">Confirm</string>
+
+    <string name="translator_main_thank_you">Thank you!</string>
+    <string name="translator_main_instructions_main">You can leave the app now, we will notify you if someone needs help.</string>
+    <string name="translator_main_edit_languages">Edit Languages</string>
+
+    <string name="undecided_pickrole_iwanttohelp">I want to help</string>
+    <string name="undecided_pickrole_ineedhelp">I need help!</string>
+
+    <string name="user_main_greeting">Hi</string>
+    <string name="user_main_makecall">Make Call</string>
+    <string name="user_main_please_choose_language">Please choose</string>
+    <string name="user_main_please_choose_country">Please choose</string>
+    <string name="user_main_content">Select the language you speak &amp; the language you need help with and then make the call.</string>
 </resources>

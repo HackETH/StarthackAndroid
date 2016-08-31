@@ -10,14 +10,12 @@ import android.widget.Toast;
 
 import com.example.noahh_000.starthack.R;
 import com.example.noahh_000.starthack.models.ActivityNavigationModel;
-import com.example.noahh_000.starthack.models.CurrentApplicationModel;
 import com.example.noahh_000.starthack.models.CurrentUserModel;
 import com.example.noahh_000.starthack.models.ErrorModel;
 import com.example.noahh_000.starthack.models.UserModel;
 import com.onesignal.OneSignal;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -26,7 +24,6 @@ import com.parse.ParseUser;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 public class CallLoadingActivity extends AppCompatActivity {
 
@@ -40,7 +37,7 @@ public class CallLoadingActivity extends AppCompatActivity {
     private void view_initialize()
     {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_call_loading);
+        setContentView(R.layout.activity_both_call_loading);
     }
 
     @Override
